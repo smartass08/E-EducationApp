@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">E-Education</string>
+    <string name="aboutUs">About Us</string>
+    <string name="enableDarkMode">Enable Dark mode</string>
+    <string name="enableLightMode">Enable Light Mode</string>
+    <string name="privacyPolicyOption"> Privacy Policies</string>
+    <string name="sliderImageContent">Slider Image</string>
+    <string name="mathsText">Maths</string>
+    <string name="physicsText">Physics</string>
+    <string name="chemistryText">Chemistry</string>
+    <string name="bioText">Biology</string>
+    <string name="lastYearText">Question Papers</string>
+    <string name="notesText">Notes</string>
+    <string name="latestUploadsText">Latest Uploads</string>
+    <string name="continueWatchingText">Continue Watching</string>
+    <string name="author">Author</string>
+</resources>
