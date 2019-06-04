@@ -13,5 +13,8 @@
     <string name="notesText">Notes</string>
     <string name="latestUploadsText">Latest Uploads</string>
     <string name="continueWatchingText">Continue Watching</string>
+    <string name="continueWatchingImageDescription">Continue Watching Video Image</string>
+    <string name="PlayBtnContentDescription">Play Button</string>
+    <string name="infoIconContentDescription">Info Icon</string>
     <string name="author">Author</string>
 </resources>
