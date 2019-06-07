@@ -5,13 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.e_education.R
 import java.lang.StringBuilder
 
 
-class ChaptersRecyclerViewAdapter(val chapterName: ArrayList<String>) :
+class ChaptersRecyclerViewAdapter(private val chapterName: ArrayList<String>) :
     RecyclerView.Adapter<ChaptersRecyclerViewAdapter.ChaptersViewHolder>(){
 
     class ChaptersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
