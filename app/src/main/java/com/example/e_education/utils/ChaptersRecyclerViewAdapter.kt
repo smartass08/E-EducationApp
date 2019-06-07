@@ -15,9 +15,8 @@ class ChaptersRecyclerViewAdapter(val chapterName: ArrayList<String>) :
     RecyclerView.Adapter<ChaptersRecyclerViewAdapter.ChaptersViewHolder>(){
 
     class ChaptersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val chapterName = itemView.findViewById<TextView>(R.id.chapterNameTextView)
-        val chapterNumber = itemView.findViewById<TextView>(R.id.chaptersNumberTextView)
-        val chapterNameRoot = itemView.findViewById<LinearLayout>(R.id.chapterNameRoot)
+        val chapterName: TextView = itemView.findViewById(R.id.chapterNameTextView)
+        val chapterNumber: TextView = itemView.findViewById(R.id.chaptersNumberTextView)
     }
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ChaptersViewHolder {
         val itemView = LayoutInflater.from(p0.context).inflate(R.layout.chapter_name_list_layout, p0, false)
