@@ -13,7 +13,6 @@ import android.content.Context
 import android.graphics.Point
 import android.widget.Toast
 
-
 class ContinueWatchingListAdapter(private val context: Context, private val imageArrayList: ArrayList<Int>, private val captionArray: ArrayList<String>)
     : RecyclerView.Adapter<ContinueWatchingListAdapter.mViewHolder>() {
     private var itemsPerPage = 2 // TODO: Find a better name for itemsPerPage

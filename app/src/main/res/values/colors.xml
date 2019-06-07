@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3C3F41</color>
-    <color name="colorToolbar">#2B2B2B</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <!-- Toolbar -->
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="appBarTitleColor">#FFFFFF</color>
+
+    <!-- activity_main.xml -->
     <color name="mathsCardColor">#d6d91b</color>
     <color name="physicsCardColor">#EF0078</color>
     <color name="chemistryCardColor">#3333FF</color>
     <color name="biologyCardColor">#75E900</color>
     <color name="lastYearCardColor">#536DFE</color>
     <color name="notesCardColor">#38C4CE</color>
+
+    <!-- activity_chapter.xml -->
+    <color name="chapterYellow">#D0C800</color>
+    <color name="chapterRed">#D21A1A</color>
+    <color name="chapterGreen">#00D02E</color>
+    <color name="chapterLGreen">#97D21A</color>
 </resources>

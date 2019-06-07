@@ -4,6 +4,8 @@
     <string name="enableDarkMode">Enable Dark mode</string>
     <string name="enableLightMode">Enable Light Mode</string>
     <string name="privacyPolicyOption"> Privacy Policies</string>
+
+    <!-- activity_main.xml -->
     <string name="sliderImageContent">Slider Image</string>
     <string name="mathsText">Maths</string>
     <string name="physicsText">Physics</string>
@@ -17,4 +19,8 @@
     <string name="PlayBtnContentDescription">Play Button</string>
     <string name="infoIconContentDescription">Info Icon</string>
     <string name="author">Author</string>
+
+    <!-- activity_subjects.xml -->
+
+    <string name="chaptersText">Chapters</string>
 </resources>

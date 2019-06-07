@@ -13,14 +13,13 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="@color/appBarTitleColor"
-            android:theme="@style/AppTheme"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+            android:theme="@style/AppTheme"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

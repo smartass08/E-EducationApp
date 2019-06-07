@@ -1,11 +1,14 @@
 package com.example.e_education
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.support.v7.widget.CardView
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -13,8 +16,10 @@ import com.example.e_education.utils.ContinueWatchingListAdapter
 import me.relex.circleindicator.CircleIndicator
 import com.example.e_education.utils.SliderPageAdapter
 import android.view.View
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+    private val TAG = "E-Education"
     private val sliderDelay: Long = 3000
     private val imageArray = arrayListOf(R.drawable.electostatics, R.drawable.phy, R.drawable.physics)
     private val caption = arrayListOf("Electrostats L-04", "Electrochemistry L-08", "What is Physics?")
@@ -62,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         sliderAdapter.onActivityDestroyed()
     }
     fun onSubjectButtonClicked(view: View){
-        Toast.makeText(applicationContext, "Not implemented", Toast.LENGTH_LONG).show()
+        val text = ((view as CardView).getChildAt(0) as TextView).text.toString()
+        val intent = Intent(this, SubjectsActivity::class.java).apply {
+            putExtra("subject", text)
+        }
+        startActivity(intent)
     }
 }
