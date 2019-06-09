@@ -1,13 +1,13 @@
 package com.example.e_education
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.CardView
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
 
         // Code to activate the automatic Image Slider
         val imageSlider = findViewById<ViewPager>(R.id.uploadSlider)
@@ -43,9 +42,18 @@ class MainActivity : AppCompatActivity() {
         // Code for Continue Watching Recycler View
         val recyclerView = findViewById<RecyclerView>(R.id.continueWatchingList)
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(
+                applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
             adapter = ContinueWatchingListAdapter(this@MainActivity, imageArray, caption)
-            addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.HORIZONTAL))
+            addItemDecoration(
+                DividerItemDecoration(
+                    applicationContext,
+                    DividerItemDecoration.HORIZONTAL
+                )
+            )
 
         }
 

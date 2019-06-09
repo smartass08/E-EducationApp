@@ -4,7 +4,7 @@
     <string name="enableDarkMode">Enable Dark mode</string>
     <string name="enableLightMode">Enable Light Mode</string>
     <string name="privacyPolicyOption"> Privacy Policies</string>
-
+    <string name="searchBarOption">Search</string>
     <!-- activity_main.xml -->
     <string name="sliderImageContent">Slider Image</string>
     <string name="mathsText">Maths</string>

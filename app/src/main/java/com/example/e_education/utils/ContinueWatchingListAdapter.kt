@@ -1,7 +1,7 @@
 package com.example.e_education.utils
 
 import android.app.AlertDialog
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView

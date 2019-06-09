@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/search_bar"
-        android:title="search"
+        android:title="@string/searchBarOption"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_search"/>
+        android:icon="@drawable/search_btn"/>
     <item
         android:id="@+id/darkModeOption"
         app:showAsAction="never"

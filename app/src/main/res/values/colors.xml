@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Toolbar -->
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#0C9BDD</color>
+    <color name="colorPrimaryDark">#057AB1</color>
+    <color name="colorAccent">#FFFFFF</color>
 
+    <color name="activityBG">#FFFFFF</color>
     <!-- activity_main.xml -->
     <color name="mathsCardColor">#d6d91b</color>
     <color name="physicsCardColor">#EF0078</color>

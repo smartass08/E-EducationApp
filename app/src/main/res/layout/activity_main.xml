@@ -9,15 +9,11 @@
         android:orientation="vertical"
         android:background="@color/colorPrimary"
         tools:context=".MainActivity">
-    <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/AppTheme"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/activityBG">
         <LinearLayout
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
@@ -25,7 +21,10 @@
             android:orientation="vertical"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp">
-    <android.support.v4.view.ViewPager
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+    <androidx.viewpager.widget.ViewPager
             android:id="@+id/uploadSlider"
             android:layout_width="match_parent"
             android:layout_height="250dp"
@@ -33,8 +32,10 @@
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/circleIndicator"
         android:layout_width="match_parent"
-        android:layout_height="48dp"/>
-     <TextView
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"/>
+        </FrameLayout>
+            <TextView
          android:text="@string/latestUploadsText"
          style="@style/TitleTextDarkMode" />
 
@@ -43,7 +44,7 @@
             android:layout_height="@dimen/cardViewHeight"
             android:layout_margin="@dimen/cardViewMargin"
             android:orientation="horizontal">
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/mathsCardView"
                 style="@style/SubjectsCardView"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius"
@@ -51,8 +52,8 @@
                 <TextView
                     style="@style/TextInsideCardView"
                     android:text="@string/mathsText"/>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
                 android:id="@+id/physicsCardView"
                 style="@style/SubjectsCardView"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius"
@@ -60,14 +61,14 @@
                 <TextView
                     style="@style/TextInsideCardView"
                     android:text="@string/physicsText"/>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/cardViewHeight"
             android:layout_margin="@dimen/cardViewMargin"
             android:orientation="horizontal">
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/chemistryCardView"
                 style="@style/SubjectsCardView"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius"
@@ -75,8 +76,8 @@
                 <TextView
                     style="@style/TextInsideCardView"
                     android:text="@string/chemistryText"/>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
                 android:id="@+id/bioCardView"
                 style="@style/SubjectsCardView"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius"
@@ -84,14 +85,14 @@
                 <TextView
                     style="@style/TextInsideCardView"
                     android:text="@string/bioText"/>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/cardViewHeight"
             android:layout_margin="@dimen/cardViewMargin"
             android:orientation="horizontal">
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/lastYearCardView"
                 style="@style/SubjectsCardView"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius"
@@ -100,8 +101,8 @@
                 <TextView
                     style="@style/TextInsideCardView"
                     android:text="@string/lastYearText"/>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
                 android:id="@+id/notesCardView"
                 style="@style/SubjectsCardView"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius"
@@ -109,17 +110,17 @@
                 <TextView
                     style="@style/TextInsideCardView"
                     android:text="@string/notesText"/>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
             <TextView
                 android:text="@string/continueWatchingText"
                 style="@style/TitleTextDarkMode"
                 android:layout_marginTop="16dp"/>
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/continueWatchingList"
                 android:layout_width="wrap_content"
                 android:layout_height="130dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="16dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
