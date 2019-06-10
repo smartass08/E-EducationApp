@@ -15,7 +15,7 @@ import com.example.e_education.R
 import java.util.concurrent.Executors
 
 
-class SliderPageAdapter(private var context: Context, private var imageArray: ArrayList<Int>): PagerAdapter()
+class SliderPageAdapter(private var context: Context, private var sliderDataArray: ArrayList<SliderData>): PagerAdapter()
 {
     private var layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     var handler: Handler? = null
@@ -45,12 +45,12 @@ class SliderPageAdapter(private var context: Context, private var imageArray: Ar
     }
 
 
-    override fun getCount(): Int = imageArray.size
+    override fun getCount(): Int = sliderDataArray.size
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val itemView = layoutInflater.inflate(R.layout.recent_uploads_object_layout, container, false)
         val imageView = itemView.findViewById<ImageView>(R.id.sliderImage)
-        imageView.setImageResource(imageArray[position])
+        imageView.setImageResource(sliderDataArray[position].image)
         container.addView(itemView)
         imageView.setOnClickListener {
             Toast.makeText(context, "Not implemented", Toast.LENGTH_LONG).show()

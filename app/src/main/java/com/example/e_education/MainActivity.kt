@@ -18,6 +18,7 @@ import com.example.e_education.utils.SliderPageAdapter
 import android.view.View
 import android.widget.TextView
 import com.example.e_education.utils.ContinueWatchingData
+import com.example.e_education.utils.SliderData
 import kotlin.math.max
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +26,9 @@ class MainActivity : AppCompatActivity() {
     private val sliderDelay: Long = 3000
     private val imageArray = arrayListOf(R.drawable.electostatics, R.drawable.phy, R.drawable.physics)
     private val caption = arrayListOf("Electrostats L-04", "Electrochemistry L-08", "What is Physics?")
-    lateinit var sliderAdapter: SliderPageAdapter
+    private lateinit var sliderAdapter: SliderPageAdapter
     private val continueWatchingDataArray = arrayListOf<ContinueWatchingData>()
+    private val sliderDataArray = arrayListOf<SliderData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,10 @@ class MainActivity : AppCompatActivity() {
 
         // Code to activate the automatic Image Slider
         val imageSlider = findViewById<ViewPager>(R.id.uploadSlider)
-        sliderAdapter = SliderPageAdapter(applicationContext, imageArray)
+        for (i in imageArray ){
+            sliderDataArray.add(SliderData(i))
+        }
+        sliderAdapter = SliderPageAdapter(applicationContext, sliderDataArray)
         sliderAdapter.setAutoSlideDuration(imageSlider, sliderDelay)
         imageSlider.adapter = sliderAdapter
         val circleIndicator = findViewById<CircleIndicator>(R.id.circleIndicator)
