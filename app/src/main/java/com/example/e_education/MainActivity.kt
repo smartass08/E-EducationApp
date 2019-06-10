@@ -17,6 +17,8 @@ import me.relex.circleindicator.CircleIndicator
 import com.example.e_education.utils.SliderPageAdapter
 import android.view.View
 import android.widget.TextView
+import com.example.e_education.utils.ContinueWatchingData
+import kotlin.math.max
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "E-Education"
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val imageArray = arrayListOf(R.drawable.electostatics, R.drawable.phy, R.drawable.physics)
     private val caption = arrayListOf("Electrostats L-04", "Electrochemistry L-08", "What is Physics?")
     lateinit var sliderAdapter: SliderPageAdapter
-
+    private val continueWatchingDataArray = arrayListOf<ContinueWatchingData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +42,17 @@ class MainActivity : AppCompatActivity() {
 
 
         // Code for Continue Watching Recycler View
+        for (i in 0..(max(imageArray.size, caption.size) - 1)){
+            continueWatchingDataArray.add(ContinueWatchingData(imageArray[i], caption[i]))
+        }
         val recyclerView = findViewById<RecyclerView>(R.id.continueWatchingList)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 applicationContext,
-                LinearLayoutManager.HORIZONTAL,
+                RecyclerView.HORIZONTAL,
                 false
             )
-            adapter = ContinueWatchingListAdapter(this@MainActivity, imageArray, caption)
+            adapter = ContinueWatchingListAdapter(this@MainActivity, continueWatchingDataArray)
             addItemDecoration(
                 DividerItemDecoration(
                     applicationContext,

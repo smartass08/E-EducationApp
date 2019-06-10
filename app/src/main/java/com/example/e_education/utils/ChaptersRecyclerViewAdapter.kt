@@ -37,7 +37,6 @@ class ChaptersRecyclerViewAdapter(private val chapterName: ArrayList<String>) :
         p0.chapterName.text = chapterName[i]
         p0.chapterNumber.text = StringBuilder("${i + 1}").toString()
         p0.chapterNameRoot.setOnClickListener(onClick)
-        p0.setIsRecyclable(false)
     }
 }
 

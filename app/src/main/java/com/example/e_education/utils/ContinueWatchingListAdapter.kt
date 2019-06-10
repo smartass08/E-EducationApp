@@ -13,7 +13,7 @@ import android.content.Context
 import android.graphics.Point
 import android.widget.Toast
 
-class ContinueWatchingListAdapter(private val context: Context, private val imageArrayList: ArrayList<Int>, private val captionArray: ArrayList<String>)
+class ContinueWatchingListAdapter(private val context: Context, private val data: ArrayList<ContinueWatchingData>)
     : RecyclerView.Adapter<ContinueWatchingListAdapter.mViewHolder>() {
     private var itemsPerPage = 2 // TODO: Find a better name for itemsPerPage
 
@@ -41,11 +41,11 @@ class ContinueWatchingListAdapter(private val context: Context, private val imag
         return mViewHolder(viewHolder)
     }
 
-    override fun getItemCount(): Int = imageArrayList.size
+    override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ContinueWatchingListAdapter.mViewHolder, at: Int) {
-        holder.captionTextView.text = captionArray[at]
-        holder.lectureImageView.setImageResource(imageArrayList[at])
+        holder.captionTextView.text = data[at].caption
+        holder.lectureImageView.setImageResource(data[at].image)
 
         // Adding onClickListener
         holder.lectureImageView.setOnClickListener {

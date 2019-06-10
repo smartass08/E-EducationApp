@@ -1,5 +1,7 @@
 package com.example.e_education.utils
 
-import android.widget.ImageView
+import android.graphics.Bitmap
 
-data class LectureData(val lectureName: String, val lectureImage: ImageView)
+data class LectureData(val lectureName: String, val lectureImage: Bitmap)
+
+data class ContinueWatchingData(val image: Int, val caption: String)

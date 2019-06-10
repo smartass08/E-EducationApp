@@ -27,8 +27,7 @@ class SubjectsActivity : AppCompatActivity() {
         chapterList.apply {
             this.adapter = adapter
             layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.VERTICAL,
+                context, RecyclerView.VERTICAL,
                 false
             )
             addItemDecoration(
