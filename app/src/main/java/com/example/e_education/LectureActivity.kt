@@ -1,9 +1,7 @@
 package com.example.e_education
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -11,13 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageView
 import android.widget.Toast
-import com.example.e_education.utils.ContinueWatchingData
 import com.example.e_education.utils.LectureData
 import com.example.e_education.utils.LectureRecyclerViewAdapter
-import java.lang.Exception
-import java.net.URL
 import kotlin.math.max
 
 class LectureActivity : AppCompatActivity() {
@@ -68,7 +62,7 @@ class LectureActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item!!.itemId == R.id.search_bar)
+        if(item?.itemId == R.id.search_bar)
             Toast.makeText(applicationContext, "Not implemented", Toast.LENGTH_LONG).show()
         return super.onOptionsItemSelected(item)
     }

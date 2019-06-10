@@ -17,28 +17,30 @@ import me.relex.circleindicator.CircleIndicator
 import com.example.e_education.utils.SliderPageAdapter
 import android.view.View
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.example.e_education.utils.ContinueWatchingData
 import com.example.e_education.utils.SliderData
+import com.example.e_education.viewmodel.MainActivityViewModel
 import kotlin.math.max
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "E-Education"
     private val sliderDelay: Long = 3000
+    private val imageSlider = findViewById<ViewPager>(R.id.uploadSlider)
+
     private val imageArray = arrayListOf(R.drawable.electostatics, R.drawable.phy, R.drawable.physics)
-    private val caption = arrayListOf("Electrostats L-04", "Electrochemistry L-08", "What is Physics?")
+    private val captionArray = arrayListOf("Electrostats L-04", "Electrochemistry L-08", "What is Physics?")
     private lateinit var sliderAdapter: SliderPageAdapter
     private val continueWatchingDataArray = arrayListOf<ContinueWatchingData>()
     private val sliderDataArray = arrayListOf<SliderData>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // Code to activate the automatic Image Slider
-        val imageSlider = findViewById<ViewPager>(R.id.uploadSlider)
-        for (i in imageArray ){
-            sliderDataArray.add(SliderData(i))
-        }
         sliderAdapter = SliderPageAdapter(applicationContext, sliderDataArray)
         sliderAdapter.setAutoSlideDuration(imageSlider, sliderDelay)
         imageSlider.adapter = sliderAdapter
@@ -47,8 +49,8 @@ class MainActivity : AppCompatActivity() {
 
 
         // Code for Continue Watching Recycler View
-        for (i in 0..(max(imageArray.size, caption.size) - 1)){
-            continueWatchingDataArray.add(ContinueWatchingData(imageArray[i], caption[i]))
+        for (i in 0..(max(imageArray.size, captionArray.size) - 1)){
+            continueWatchingDataArray.add(ContinueWatchingData(imageArray[i], captionArray[i]))
         }
         val recyclerView = findViewById<RecyclerView>(R.id.continueWatchingList)
         recyclerView.apply {
