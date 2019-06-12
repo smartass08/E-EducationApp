@@ -19,8 +19,12 @@
     <string name="PlayBtnContentDescription">Play Button</string>
     <string name="infoIconContentDescription">Info Icon</string>
     <string name="author">Author</string>
+    <string name="publishButton">Publish</string>
 
-    <!-- activity_subjects.xml -->
-
-    <string name="chaptersText">Chapters</string>
+    <!-- activity_publish_video.xml -->
+    <string name="youtubeURLHint">Enter the Youtube Video ID</string>
+    <string name="existingChapter">Add to an Existing Chapter</string>
+    <string name="newChapter">Add a new chapter</string>
+    <string name="lectureName">Lecture Name</string>
+    <string name="newChapterName">Enter name of the chapter</string>
 </resources>

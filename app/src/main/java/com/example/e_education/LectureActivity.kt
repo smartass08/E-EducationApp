@@ -2,6 +2,7 @@ package com.example.e_education
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.e_education.utils.Activity
 import com.example.e_education.viewmodel.LectureData
 import com.example.e_education.utils.LectureRecyclerViewAdapter
 import com.example.e_education.viewmodel.LectureViewModel
@@ -27,7 +30,7 @@ class LectureActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecture)
-        supportActionBar!!.title = intent.getStringExtra("chapter")
+        title = intent.getStringExtra("chapter")
 
         // Initiating the Data model
         model = ViewModelProviders.of(this).get(LectureViewModel::class.java)
@@ -73,5 +76,11 @@ class LectureActivity : AppCompatActivity() {
         if(item?.itemId == R.id.search_bar)
             Toast.makeText(applicationContext, "Not implemented", Toast.LENGTH_LONG).show()
         return super.onOptionsItemSelected(item)
+    }
+
+    fun onAddButtonClicked(view: View){
+        val intent = Intent(this, PublishVideoActivity::class.java)
+        intent.putExtra("activity", Activity.LectureActivity)
+        startActivity(intent)
     }
 }

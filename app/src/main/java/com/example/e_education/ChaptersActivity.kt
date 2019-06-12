@@ -11,33 +11,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DiffUtil
-import com.example.e_education.utils.ChaptersDiffUtilCallback
+import com.example.e_education.utils.Activity
 import com.example.e_education.utils.ChaptersRecyclerViewAdapter
 import com.example.e_education.viewmodel.Chapter
-import com.example.e_education.viewmodel.SubjectsActivityViewModel
-import com.jakewharton.rxbinding2.widget.RxSearchView
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.example.e_education.viewmodel.ChaptersViewModel
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import java.util.concurrent.TimeUnit
 
 class SubjectsActivity : AppCompatActivity() {
     private val TAG = "E-Education"
-    private var model: SubjectsActivityViewModel? = null
+    private var model: ChaptersViewModel? = null
     private var adapter: ChaptersRecyclerViewAdapter? = null
     private val disposable = CompositeDisposable()
     private lateinit var chapterList: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_subjects)
-        supportActionBar!!.title = intent.getStringExtra("subject")
+        setContentView(R.layout.activity_chapters)
+        title = intent.getStringExtra("subject")
 
         // Initialising out view model
-        model = ViewModelProviders.of(this).get(SubjectsActivityViewModel::class.java)
+        model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
 
         // Initialising the RecyclerView
         chapterList = findViewById(R.id.chaptersList)
@@ -80,5 +76,11 @@ class SubjectsActivity : AppCompatActivity() {
 
         })
         return super.onCreateOptionsMenu(menu)
+    }
+
+    fun onAddButtonClicked(view: View){
+        val intent = Intent(this, PublishVideoActivity::class.java)
+        intent.putExtra("activity", Activity.ChaptersActivity)
+        startActivity(intent)
     }
 }

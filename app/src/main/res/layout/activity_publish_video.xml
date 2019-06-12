@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="8dp"
+    tools:context=".PublishVideoActivity">
+    <EditText
+        android:id="@+id/youtubeURLField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/youtubeURLHint"
+        android:inputType="textUri" />
+    <EditText
+        android:id="@+id/lectureNameField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/lectureName"
+        android:inputType="textCapWords"/>
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+        <RadioButton android:id="@+id/radio_existing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/existingChapter"
+            android:onClick="onRadioButtonClicked"
+            android:buttonTint="@color/colorPrimary"/>
+        <RadioButton android:id="@+id/radio_newChapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/newChapter"
+            android:onClick="onRadioButtonClicked"
+            android:buttonTint="@color/colorPrimary"/>
+    </RadioGroup>
+    <Spinner
+        android:id="@+id/chapterSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:visibility="gone"/>
+    <EditText
+        android:id="@+id/newChapterNameField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/newChapterName"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/publishButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:text="@string/publishButton"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onPublishButtonClicked"/>
+</LinearLayout>

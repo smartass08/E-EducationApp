@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SubjectsActivityViewModel: ViewModel(){
+class ChaptersViewModel: ViewModel(){
 
     private var chapterData = MutableLiveData<List<Chapter>>()
     private var filteredChapterData = MutableLiveData<List<Chapter>>()

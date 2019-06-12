@@ -3,7 +3,7 @@
     <!-- Toolbar -->
     <color name="colorPrimary">#0C9BDD</color>
     <color name="colorPrimaryDark">#057AB1</color>
-    <color name="colorAccent">#FFFFFF</color>
+    <color name="colorAccent">#0C9BDD</color>
 
     <color name="activityBG">#FFFFFF</color>
     <!-- activity_main.xml -->
