@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Handler
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.e_education.R
+import com.example.e_education.viewmodel.SliderData
 import java.util.concurrent.Executors
 
 

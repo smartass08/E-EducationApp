@@ -1,63 +1,71 @@
 package com.example.e_education
 
+import android.app.SearchManager
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.Toast
-import com.example.e_education.utils.LectureData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.example.e_education.viewmodel.LectureData
 import com.example.e_education.utils.LectureRecyclerViewAdapter
+import com.example.e_education.viewmodel.LectureViewModel
 import kotlin.math.max
 
 class LectureActivity : AppCompatActivity() {
 
-    private val lectureArray = arrayListOf("Lecture 1: Electric Current and drift velocity",
-        "Lecture 2: Resistivity - defination and formula",
-        "Lecture 3: Colour Resistivity of carbon Resistance")
-
-    private var imageArray = arrayListOf<Bitmap>()
-
-    private var lectureDataArray = ArrayList<LectureData>()
-
-
+    lateinit var model: LectureViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecture)
         supportActionBar!!.title = intent.getStringExtra("chapter")
 
-
-        imageArray = arrayListOf(BitmapFactory.decodeResource(resources, R.drawable.physics),
-        BitmapFactory.decodeResource(resources, R.drawable.phy),
-        BitmapFactory.decodeResource(resources, R.drawable.electostatics))
-
-        for (i in 0..(max(imageArray.size, lectureArray.size) - 1)){
-            lectureDataArray.add(LectureData(lectureArray[i], imageArray[i]))
-        }
-
+        // Initiating the Data model
+        model = ViewModelProviders.of(this).get(LectureViewModel::class.java)
+        model.init(resources)
+        // Initiate recyclerView
         val recyclerView: RecyclerView = findViewById(R.id.lectureRecyclerView)
-        recyclerView.apply {
-            adapter = LectureRecyclerViewAdapter(lectureDataArray)
-            layoutManager = LinearLayoutManager(
+        val adapter = LectureRecyclerViewAdapter()
+        recyclerView.adapter = adapter
+        model.getLectureList().observe(this, Observer {
+            adapter.setData(ArrayList(it))
+            Log.d("tag", it.toString())
+        })
+        recyclerView.layoutManager = LinearLayoutManager(
                 applicationContext,
                 RecyclerView.VERTICAL,
                 false
             )
-            addItemDecoration(
+        recyclerView.addItemDecoration(
                 DividerItemDecoration(
-                    context,
+                    this,
                     DividerItemDecoration.VERTICAL
                 )
             )
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_action_bar, menu)
+        val searchView = menu?.findItem(R.id.search_bar)?.actionView as SearchView
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean = true
+            override fun onQueryTextChange(p0: String?): Boolean {
+                model.search(p0)
+                return true
+            }
+
+        })
         return super.onCreateOptionsMenu(menu)
     }
 

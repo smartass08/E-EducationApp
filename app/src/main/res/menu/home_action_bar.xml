@@ -4,7 +4,7 @@
         android:id="@+id/search_bar"
         android:title="@string/searchBarOption"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/search_btn"/>
+        app:actionViewClass="android.widget.SearchView"/>
     <item
         android:id="@+id/darkModeOption"
         app:showAsAction="never"

@@ -7,13 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import com.example.e_education.R
+import com.example.e_education.viewmodel.Chapter
 import java.lang.StringBuilder
 
 
-class ChaptersRecyclerViewAdapter(private val chapterName: ArrayList<String>) :
+class ChaptersRecyclerViewAdapter :
         RecyclerView.Adapter<ChaptersRecyclerViewAdapter.ChaptersViewHolder>(){
 
+    private var chapters: List<Chapter> = ArrayList()
+    private var oldChapters: List<Chapter> = ArrayList()
+
+    fun setData(data: List<Chapter>){
+        oldChapters = chapters
+        chapters = data
+        val diffUtil = DiffUtil.calculateDiff(ChaptersDiffUtilCallback(oldChapters, chapters), true)
+        diffUtil.dispatchUpdatesTo(this)
+    }
     private var onClick: (view: View) -> Unit = {}
     fun setOnClickListener(callback: (view: View) -> Unit){
         onClick = callback
@@ -31,10 +42,10 @@ class ChaptersRecyclerViewAdapter(private val chapterName: ArrayList<String>) :
         return ChaptersViewHolder(itemView)
     }
 
-    override fun getItemCount(): Int = chapterName.size
+    override fun getItemCount(): Int = chapters.size
 
     override fun onBindViewHolder(p0: ChaptersViewHolder, i: Int) {
-        p0.chapterName.text = chapterName[i]
+        p0.chapterName.text = chapters[i].chapterName
         p0.chapterNumber.text = StringBuilder("${i + 1}").toString()
         p0.chapterNameRoot.setOnClickListener(onClick)
     }
