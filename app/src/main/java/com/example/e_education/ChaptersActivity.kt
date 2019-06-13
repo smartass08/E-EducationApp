@@ -15,7 +15,7 @@ import android.view.View
 import android.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.e_education.utils.Activity
+import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.ChaptersRecyclerViewAdapter
 import com.example.e_education.viewmodel.Chapter
 import com.example.e_education.viewmodel.ChaptersViewModel
@@ -80,7 +80,7 @@ class SubjectsActivity : AppCompatActivity() {
 
     fun onAddButtonClicked(view: View){
         val intent = Intent(this, PublishVideoActivity::class.java)
-        intent.putExtra("activity", Activity.ChaptersActivity)
+        intent.putExtra("activity", ActivityIndex.ChaptersActivity)
         startActivity(intent)
     }
 }

@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
-import com.example.e_education.utils.Activity
+import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.viewmodel.ChaptersViewModel
-import com.jakewharton.rxbinding2.widget.checked
 import kotlinx.android.synthetic.main.activity_publish_video.*
 
 class PublishVideoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -31,12 +29,12 @@ class PublishVideoActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         setContentView(R.layout.activity_publish_video)
         title = "Publish a New Video"
         model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
-        val parentActivity = intent.getIntExtra("activity", Activity.ChaptersActivity)
-        if (parentActivity == Activity.ChaptersActivity) {
+        val parentActivity = intent.getIntExtra("activity", ActivityIndex.ChaptersActivity)
+        if (parentActivity == ActivityIndex.ChaptersActivity) {
             radio_newChapter.isChecked = true
             onRadioButtonClicked(radio_newChapter)
         }
-        else if (parentActivity == Activity.LectureActivity) {
+        else if (parentActivity == ActivityIndex.LectureActivity) {
             radio_existing.isChecked = true
             onRadioButtonClicked(radio_existing)
         }

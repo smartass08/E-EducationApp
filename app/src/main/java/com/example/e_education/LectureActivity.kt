@@ -3,8 +3,6 @@ package com.example.e_education
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,11 +16,9 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.e_education.utils.Activity
-import com.example.e_education.viewmodel.LectureData
+import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.LectureRecyclerViewAdapter
 import com.example.e_education.viewmodel.LectureViewModel
-import kotlin.math.max
 
 class LectureActivity : AppCompatActivity() {
 
@@ -80,7 +76,7 @@ class LectureActivity : AppCompatActivity() {
 
     fun onAddButtonClicked(view: View){
         val intent = Intent(this, PublishVideoActivity::class.java)
-        intent.putExtra("activity", Activity.LectureActivity)
+        intent.putExtra("activity", ActivityIndex.LectureActivity)
         startActivity(intent)
     }
 }
