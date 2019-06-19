@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="TitleTextDarkMode" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
         <item name="android:layout_width">wrap_content</item>
@@ -15,6 +16,7 @@
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:layout_marginBottom">16dp</item>
     </style>
+
     <style name="SubjectsCardView" parent="CardView">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -25,6 +27,7 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="android:onClick">onSubjectButtonClicked</item>
     </style>
+
     <style name="TextInsideCardView" parent="TextAppearance.AppCompat.Title">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -34,6 +37,27 @@
         <item name="android:textAlignment">center</item>
         <item name="android:padding">8dp</item>
     </style>
-    <style name="dialogStyle" parent="android:Theme.Holo.Dialog"/>
 
+    <style name="dialogStyle" parent="android:Theme.Holo.Dialog" />
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:text">@string/action_sign_up</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

@@ -6,9 +6,9 @@
         app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.SearchView"/>
     <item
-        android:id="@+id/darkModeOption"
+        android:id="@+id/logout"
         app:showAsAction="never"
-        android:title="@string/enableDarkMode"/>
+        android:title="@string/logout"/>
     <item
         android:id="@+id/aboutUsOption"
         app:showAsAction="never"

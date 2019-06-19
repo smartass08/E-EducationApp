@@ -1,6 +1,8 @@
-package com.example.e_education.viewmodel
+package com.example.e_education.viewmodel.DAO
 
 import androidx.lifecycle.MutableLiveData
+import com.example.e_education.viewmodel.Chapter
+import com.example.e_education.viewmodel.LectureData
 
 interface ChapterDAO {
     fun insert(chapter: Chapter)

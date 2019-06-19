@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">E-Education</string>
     <string name="aboutUs">About Us</string>
-    <string name="enableDarkMode">Enable Dark mode</string>
+    <string name="logout">Logout</string>
     <string name="enableLightMode">Enable Light Mode</string>
     <string name="privacyPolicyOption"> Privacy Policies</string>
     <string name="searchBarOption">Search</string>
@@ -27,4 +27,20 @@
     <string name="newChapter">Add a new chapter</string>
     <string name="lectureName">Lecture Name</string>
     <string name="newChapterName">Enter name of the chapter</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="error_password_required">Please enter a password</string>
+    <string name="title_activity_new_user_info_collection">NewUserInfoCollectionActivity</string>
+    <string name="YourName">Enter Your name</string>
+    <string name="yourFormNumber">Enter your form number</string>
 </resources>

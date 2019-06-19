@@ -4,6 +4,7 @@ import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.e_education.viewmodel.repository.LectureRepository
 
 class LectureViewModel: ViewModel() {
     private lateinit var repo: LectureRepository

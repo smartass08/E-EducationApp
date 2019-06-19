@@ -1,5 +1,6 @@
 package com.example.e_education
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +18,8 @@ import android.widget.TextView
 import com.example.e_education.utils.*
 import com.example.e_education.viewmodel.ContinueWatchingData
 import com.example.e_education.viewmodel.SliderData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.max
 
 class MainActivity : AppCompatActivity() {
@@ -28,12 +31,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sliderAdapter: SliderPageAdapter
     private val continueWatchingDataArray = arrayListOf<ContinueWatchingData>()
     private val sliderDataArray = arrayListOf<SliderData>()
-
+    private val db = FirebaseFirestore.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         for (i in 0..(max(imageArray.size, captionArray.size) - 1)){
             sliderDataArray.add(SliderData(i, imageArray[i]))
         }
@@ -73,7 +76,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
+    private fun logout(){
+        auth.signOut()
+        finish()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_action_bar, menu)
         return super.onCreateOptionsMenu(menu)
@@ -82,6 +90,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == R.id.search_bar)
             Toast.makeText(applicationContext, "Search Not yet implemented", Toast.LENGTH_LONG).show()
+        else if (item.itemId == R.id.logout)
+            logout()
         return super.onOptionsItemSelected(item)
     }
 
@@ -89,6 +99,8 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         sliderAdapter.onActivityDestroyed()
     }
+
+    @SuppressWarnings
     fun onSubjectButtonClicked(view: View){
         val text = ((view as CardView).getChildAt(0) as TextView).text.toString()
         val intent = Intent(this, SubjectsActivity::class.java).apply {

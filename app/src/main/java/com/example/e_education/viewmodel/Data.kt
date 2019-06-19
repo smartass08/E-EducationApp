@@ -27,3 +27,16 @@ data class LectureData(
     val lectureName: String,
     val lectureImage: Bitmap
 )
+
+data class User(
+    val name: String,
+    val email: String,
+    val standard: String,
+    val formNum: String,
+    val isVerified: Boolean
+){
+    constructor() : this("", "", "", "", false)
+    companion object {
+        const val USERS_DB_NAME = "users"
+    }
+}

@@ -1,12 +1,16 @@
-package com.example.e_education.viewmodel
+package com.example.e_education.viewmodel.repository
 
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import androidx.lifecycle.MutableLiveData
 import com.example.e_education.R
+import com.example.e_education.viewmodel.Chapter
+import com.example.e_education.viewmodel.DAO.ChapterDAO
+import com.example.e_education.viewmodel.DAO.LectureDAO
+import com.example.e_education.viewmodel.LectureData
 
 
-class ChapterRepository: ChapterDAO{
+class ChapterRepository: ChapterDAO {
     private val dbChapterNames = arrayListOf(
         "What is physics?", "Vectors", "NLM", "Kinematics",
         "What is physics?", "Vectors", "NLM", "Kinematics",
@@ -42,7 +46,7 @@ class ChapterRepository: ChapterDAO{
 
 }
 
-class LectureRepository(resources: Resources): LectureDAO{
+class LectureRepository(resources: Resources): LectureDAO {
     private val lectureArray = arrayListOf(
         "Lecture 1: Electric Current and drift velocity",
         "Lecture 2: Resistivity - defination and formula",
