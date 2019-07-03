@@ -2,27 +2,27 @@ package com.example.e_education
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.e_education.utils.ActivityIndex
-import com.example.e_education.viewmodel.ChaptersViewModel
+import com.example.e_education.models.Chapter
+import com.example.e_education.models.ChaptersViewModel
+import com.example.e_education.models.Lecture
+import com.example.e_education.utils.toast
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_publish_video.*
 
-class PublishVideoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class PublishVideoActivity : AppCompatActivity(){
 
+    private val TAG = "PublishVideoActivity"
     private lateinit var model: ChaptersViewModel
-
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    private var chapter: Chapter = Chapter()
+    private var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +38,12 @@ class PublishVideoActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
             radio_existing.isChecked = true
             onRadioButtonClicked(radio_existing)
         }
+        classSpinner.adapter = ArrayAdapter<String>(this,
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(R.array.classes))
+        subjectSpinner.adapter = ArrayAdapter<String>(this,
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(R.array.subjects))
     }
 
 
@@ -45,38 +51,80 @@ class PublishVideoActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         if (view.id == R.id.radio_existing) {
             newChapterNameField.visibility = View.GONE
             chapterSpinner.visibility = View.VISIBLE
-            val items = ArrayList<String>()
-            for (item in model.getChapterList()!!.value!!)
-                items.add(item.chapterName!!)
-            chapterSpinner.adapter = ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item, items)
+            model.getChapterList()?.observe(this, Observer<List<Chapter>> {
+                val list = arrayListOf("Select existing Chapter")
+                for (i in it){
+                    list.add(i.chapterName)
+                }
+                chapterSpinner.adapter = ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_spinner_dropdown_item, list)
+            })
+
         }
 
         else if (view.id == radio_newChapter.id) {
             chapterSpinner.visibility = View.GONE
             newChapterNameField.visibility = View.VISIBLE
         }
+        chapterSpinner.adapter = ArrayAdapter<String>(
+            this, android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(R.array.classes)
+        )
     }
 
-    fun onPublishButtonClicked(view: View){
+    private fun isFormValid(): Boolean{
         if (newChapterNameField.text.isEmpty() && !chapterSpinner.isSelected)
         {
-            Toast.makeText(this, "Please enter chapter name or select from an existing one!", Toast.LENGTH_LONG).show()
-            return
+            toast("Please enter chapter name or select from an existing one!")
+            return false
         }
         if (youtubeURLField.text.isEmpty())
         {
-            Toast.makeText(this, "Please enter a valid URL!", Toast.LENGTH_LONG).show()
-            return
+            toast("Please enter a valid URL!")
+            return false
         }
-        if (lectureNameField.text.isEmpty())
-        {
-            Toast.makeText(this, "Please enter lecture name!", Toast.LENGTH_LONG).show()
-            return
+        if (chapterNum.text.isEmpty()){
+            toast("Please enter lecture name!")
+            return false
         }
-        else {
-            Toast.makeText(this, "This function is not yet implemented", Toast.LENGTH_LONG).show()
+        if (classSpinner.selectedItemPosition == 0){
+            toast("Please select a class!", Toast.LENGTH_LONG)
+            return false
+        }
+        if (radio_newChapter.isSelected && chapterSpinner.selectedItemPosition == 0){
+                toast("Please select a chapter in which lecture is to be added!")
+                return false
+        }
+        if (radio_existing.isSelected){
+            if (lectureNameField.text.isEmpty())
+            {
+                toast("Please enter lecture name!")
+                return false
+            }
+        }
+        return true
+    }
+    fun onPublishButtonClicked(view: View){
+        if (isFormValid()){
+            if (radio_newChapter.isSelected){
+                chapter.chapterName = newChapterNameField.text.toString()
+                chapter.chapterNumber = chapterNum.text.toString().toInt()
+            } else if (radio_existing.isSelected){
+                chapter.chapterName = (chapterSpinner.selectedItem as TextView).text.toString()
+                chapter.chapterNumber = chapterSpinner.selectedItemPosition
+            }
+
+            chapter.standard = (classSpinner.selectedView as TextView).text.toString()
+            model.insert(chapter, Lecture(youtubeURLField.text.toString(),
+                lectureNameField.text.toString(),
+                chapterNum.text.toString().toInt(),
+                newChapterNameField.text.toString(),
+                ((classSpinner.selectedView) as TextView).text.toString(),
+                subjectSpinner.selectedItemPosition))
+            finish()
+        } else {
+            return
         }
     }
 }

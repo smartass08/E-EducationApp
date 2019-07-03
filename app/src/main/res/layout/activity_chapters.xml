@@ -5,19 +5,26 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/activityBG">
+    <RelativeLayout
+        android:id="@+id/listRelLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chaptersList"
-            android:layout_width="match_parent"
+                android:id="@+id/chaptersList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/publishButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"/>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/add"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="onAddButtonClicked"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"/>
+            android:src="@drawable/add"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="onAddButtonClicked"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"/>
     </RelativeLayout>
+</RelativeLayout>

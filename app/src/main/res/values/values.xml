@@ -4,4 +4,17 @@
     <dimen name="cardViewCornerRadius">14dp</dimen>
     <dimen name="cardViewHeight">80dp</dimen>
     <dimen name="cardViewMargin">10dp</dimen>
+
+    <string-array name="classes">
+        <item>Select Class</item>
+        <item>XI</item>
+        <item>XII</item>
+    </string-array>
+
+    <string-array name="subjects">
+        <item>Select Subject</item>
+        <item>Physics</item>
+        <item>Chemistry</item>
+        <item>Biology</item>
+    </string-array>
 </resources>

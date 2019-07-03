@@ -1,15 +1,14 @@
 package com.example.e_education.utils
 
-import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
-import com.example.e_education.viewmodel.Chapter
-import com.example.e_education.viewmodel.LectureData
+import com.example.e_education.models.Chapter
+import com.example.e_education.models.LectureData
 
 class ChaptersDiffUtilCallback(private val oldDataSet: List<Chapter>,private  val newDataSet: List<Chapter>):
     DiffUtil.Callback(){
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldDataSet[oldItemPosition].id == newDataSet[newItemPosition].id
+            return oldDataSet[oldItemPosition].chapterNumber == newDataSet[newItemPosition].chapterNumber
         }
 
         override fun getOldListSize(): Int = oldDataSet.size

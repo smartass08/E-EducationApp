@@ -12,8 +12,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.UiThread
-import androidx.lifecycle.ViewModelProviders
-import com.example.e_education.viewmodel.User
+import com.example.e_education.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 /**
@@ -41,26 +39,26 @@ class LoginActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         val currUser = auth.currentUser
         if (currUser != null){
             showProgress(true)
-            val docRef = db.collection(User.USERS_DB_NAME).document(currUser.uid)
-            docRef.get()
-                .addOnSuccessListener {
-                    val user = it.toObject(User::class.java)
-                    finish()
-                    val intent: Intent
-                    if (user == null){
+            val docRef = db.collection(User.USER_FIELD_NAME).document(currUser.uid)
+            docRef.get().addOnSuccessListener {
+                finish()
+                val intent: Intent
+                if (!it.exists()){
 
-                        // profile is not complete
-                        intent = Intent(this@LoginActivity, NewUserInfoCollectionActivity::class.java)
-                        intent.putExtra(EMAIL_INTENT, currUser.email)
-                        intent.putExtra(UID_INTENT, currUser.uid)
-                        startActivity(intent)
-                        } else {
-                            // everything is fine. launch MainActivity
-                            Log.d(TAG, "${user.email}: ${user.isVerified}, ${user.formNum}, ${user.standard}")
-                            intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            startActivity(intent)
-                        }
-                    }
+                    // profile is not complete
+                    intent = Intent(this@LoginActivity, NewUserInfoCollectionActivity::class.java)
+                    intent.putExtra(EMAIL_INTENT, currUser.email)
+                    intent.putExtra(UID_INTENT, currUser.uid)
+                    startActivity(intent)
+                } else {
+                    val user = it.toObject(User::class.java)
+                    // everything is fine. launch MainActivity
+                    Log.d(TAG, "${user!!.email}: ${user.isVerified}, ${user.formNum}, ${user.standard}")
+                    intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
                 }
             }
     override fun onCreate(savedInstanceState: Bundle?) {

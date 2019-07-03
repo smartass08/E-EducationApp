@@ -18,11 +18,25 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.LectureRecyclerViewAdapter
-import com.example.e_education.viewmodel.LectureViewModel
+import com.example.e_education.models.LectureViewModel
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_chapters.*
 
 class LectureActivity : AppCompatActivity() {
 
     lateinit var model: LectureViewModel
+    private val auth = FirebaseAuth.getInstance()
+    private val currUser = auth.currentUser
+    private val TAG = "LectureActivity"
+
+
+    override fun onStart() {
+        super.onStart()
+        if (currUser != null && currUser.uid == BuildConfig.AdminUID){
+            Log.d(TAG, "Admin")
+            publishButton.show()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecture)

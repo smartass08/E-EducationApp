@@ -6,14 +6,11 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.e_education.viewmodel.User
+import com.example.e_education.models.User
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_login.*
 
 import kotlinx.android.synthetic.main.activity_user_info.*
 
@@ -82,7 +79,7 @@ class NewUserInfoCollectionActivity : AppCompatActivity() {
 
     inner class UpdateTask(val user: User) : AsyncTask<Void, Void, Unit>(){
         override fun doInBackground(vararg p0: Void?){
-            dbRef.collection(User.USERS_DB_NAME).document(uid!!)
+            dbRef.collection(User.USER_FIELD_NAME).document(uid!!)
                 .set(user)
                 .addOnSuccessListener{
                     Log.d("UpdateTask", "success")

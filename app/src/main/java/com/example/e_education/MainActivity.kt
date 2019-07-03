@@ -1,6 +1,5 @@
 package com.example.e_education
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,8 +15,8 @@ import me.relex.circleindicator.CircleIndicator
 import android.view.View
 import android.widget.TextView
 import com.example.e_education.utils.*
-import com.example.e_education.viewmodel.ContinueWatchingData
-import com.example.e_education.viewmodel.SliderData
+import com.example.e_education.models.ContinueWatchingData
+import com.example.e_education.models.SliderData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.max

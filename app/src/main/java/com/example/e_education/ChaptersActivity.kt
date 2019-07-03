@@ -1,6 +1,5 @@
 package com.example.e_education
 
-
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -17,31 +16,54 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.ChaptersRecyclerViewAdapter
-import com.example.e_education.viewmodel.Chapter
-import com.example.e_education.viewmodel.ChaptersViewModel
-import io.reactivex.disposables.CompositeDisposable
+import com.example.e_education.models.Chapter
+import com.example.e_education.models.ChaptersViewModel
+import com.example.e_education.models.User
+import com.example.e_education.utils.SubjectNumber
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_chapters.*
 
 class SubjectsActivity : AppCompatActivity() {
     private val TAG = "E-Education"
     private var model: ChaptersViewModel? = null
     private var adapter: ChaptersRecyclerViewAdapter? = null
-    private val disposable = CompositeDisposable()
     private lateinit var chapterList: RecyclerView
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+    private val currUser = auth.currentUser
+    private var mUser: User? = null
+
+    override fun onStart() {
+        super.onStart()
+        if (currUser != null && currUser.uid == BuildConfig.AdminUID){
+            Log.d(TAG, "Admin")
+            publishButton.show()
+            val docRef = db.collection(User.USER_FIELD_NAME).document(currUser.uid)
+            docRef.get().addOnSuccessListener {
+                mUser = it.toObject(User::class.java)
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chapters)
-        title = intent.getStringExtra("subject")
-
+        val mTitle = intent.getStringExtra("subject")
+        title = mTitle
         // Initialising out view model
         model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
-
+        model!!.init("XI", SubjectNumber.toKey(mTitle))
         // Initialising the RecyclerView
         chapterList = findViewById(R.id.chaptersList)
         adapter = ChaptersRecyclerViewAdapter()
         chapterList.adapter = adapter
         model!!.getChapterList()?.observe(this, Observer<List<Chapter>>{
-              adapter?.setData(it!!)
-              Log.d(TAG, it.toString())
+              if (it.isNullOrEmpty()){
+                  adapter?.setData(emptyList())
+              } else {
+                  adapter?.setData(it)
+                  Log.d(TAG, it.toString())
+              }
         })
         adapter!!.setOnClickListener {
             val intent = Intent(applicationContext, LectureActivity::class.java)

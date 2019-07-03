@@ -1,14 +1,16 @@
-package com.example.e_education.viewmodel.DAO
+package com.example.e_education.models.DAO
 
 import androidx.lifecycle.MutableLiveData
-import com.example.e_education.viewmodel.Chapter
-import com.example.e_education.viewmodel.LectureData
+import com.example.e_education.models.Chapter
+import com.example.e_education.models.Lecture
+import com.example.e_education.models.LectureData
+import javax.security.auth.Subject
 
 interface ChapterDAO {
-    fun insert(chapter: Chapter)
+    fun insert(lecture: Lecture)
     fun delete(chapter: Chapter)
     fun update(chapter: Chapter)
-    fun getAllChapters(): MutableLiveData<List<Chapter>>?
+    fun getAllChapters(standard: String, subject: Int)
 }
 
 interface LectureDAO {

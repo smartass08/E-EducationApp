@@ -11,7 +11,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.e_education.R
-import com.example.e_education.viewmodel.SliderData
+import com.example.e_education.models.SliderData
 import java.util.concurrent.Executors
 
 

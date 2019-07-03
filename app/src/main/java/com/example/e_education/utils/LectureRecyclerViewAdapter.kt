@@ -1,6 +1,5 @@
 package com.example.e_education.utils
 
-import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import com.example.e_education.R
-import com.example.e_education.viewmodel.LectureData
+import com.example.e_education.models.LectureData
 
 class LectureRecyclerViewAdapter:
         RecyclerView.Adapter<LectureRecyclerViewAdapter.ViewHolder>(){

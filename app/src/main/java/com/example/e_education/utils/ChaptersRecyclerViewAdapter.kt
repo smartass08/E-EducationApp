@@ -1,7 +1,6 @@
 package com.example.e_education.utils
 
 import androidx.recyclerview.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import com.example.e_education.R
-import com.example.e_education.viewmodel.Chapter
+import com.example.e_education.models.Chapter
 import java.lang.StringBuilder
 
 

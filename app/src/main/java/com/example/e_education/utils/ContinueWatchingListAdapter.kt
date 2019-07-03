@@ -12,7 +12,7 @@ import android.view.WindowManager
 import android.content.Context
 import android.graphics.Point
 import android.widget.Toast
-import com.example.e_education.viewmodel.ContinueWatchingData
+import com.example.e_education.models.ContinueWatchingData
 
 class ContinueWatchingListAdapter(private val context: Context, private val data: ArrayList<ContinueWatchingData>)
     : RecyclerView.Adapter<ContinueWatchingListAdapter.mViewHolder>() {

@@ -1,4 +1,4 @@
-package com.example.e_education.viewmodel
+package com.example.e_education.models
 
 import android.graphics.Bitmap
 
@@ -18,14 +18,29 @@ data class SliderData(
 )
 
 data class Chapter (
-    val id: Int, // primary key
-    val chapterName: String?
-)
+    var subject: String,
+    var chapterNumber: Int,
+    var chapterName: String,
+    var standard: String
+){
+    constructor(): this("",0, "", "")
+    companion object {
+        const val DB_FIELD_NAME = "chapters"
+    }
+}
 
 data class LectureData(
-    val id: Int,
+    val id: String,
     val lectureName: String,
     val lectureImage: Bitmap
+)
+data class Lecture(
+    val id: String = "",
+    val lectureName: String = "",
+    val ofChapter: Int = -1,
+    val chapterName: String = "",
+    val standard: String = "",
+    val subject: Int = -1
 )
 
 data class User(
@@ -37,6 +52,6 @@ data class User(
 ){
     constructor() : this("", "", "", "", false)
     companion object {
-        const val USERS_DB_NAME = "users"
+        const val USER_FIELD_NAME = "users"
     }
 }

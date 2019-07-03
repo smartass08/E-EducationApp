@@ -1,10 +1,10 @@
-package com.example.e_education.viewmodel
+package com.example.e_education.models
 
 import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.e_education.viewmodel.repository.LectureRepository
+import com.example.e_education.models.repository.LectureRepository
 
 class LectureViewModel: ViewModel() {
     private lateinit var repo: LectureRepository
