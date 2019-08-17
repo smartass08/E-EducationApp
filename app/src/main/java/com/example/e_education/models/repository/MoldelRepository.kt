@@ -1,21 +1,15 @@
 package com.example.e_education.models.repository
 
-import android.content.res.Resources
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
+import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.example.e_education.R
-import com.example.e_education.models.Chapter
-import com.example.e_education.models.DAO.ChapterDAO
-import com.example.e_education.models.DAO.LectureDAO
 import com.example.e_education.models.Lecture
-import com.example.e_education.models.LectureData
 import com.example.e_education.utils.SubjectNumber
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import javax.security.auth.Subject
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
+import java.io.File
+import java.util.UUID
 
 class ChapterRepository{
 
@@ -25,82 +19,82 @@ class ChapterRepository{
     }
     private val TAG = "ChapterRepository"
     private val db = FirebaseFirestore.getInstance()
+    private val collectionRef = db.collection(collectionRoot)
+    private val storageRef = FirebaseStorage.getInstance().reference
 
-    data class InsertData(
-        val db: FirebaseFirestore,
-        val lecture: Lecture
-    )
+    private suspend fun insertInBackground(lecture: Lecture, lectureImage: Uri?){
+        if (lectureImage != null){
+            val file = Uri.fromFile(File(lectureImage.path))
+            val metadata = StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build()
+            val ref = storageRef.child("${lecture.ofChapter}/${UUID.randomUUID()}.jpg")
+            val uploadTask = ref.putFile(file, metadata)
+            uploadTask.addOnSuccessListener {
+                Log.d(TAG, it.storage.downloadUrl.toString())
+            }.addOnFailureListener {
+                Log.d(TAG, it.message)
+            }
+        }
 
-    class InsertAsyncTask: AsyncTask<InsertData, Unit, Unit>(){
-        override fun doInBackground(vararg p0: InsertData?){
-            p0[0]!!.db.collection(collectionRoot).document(p0[0]!!.lecture.ofChapter.toString())
-                .set(p0[0]!!.lecture)
-                .addOnSuccessListener {
-                    Log.d("ChapterRepository", "Successfully added lecture")
+        db.collection(collectionRoot).document()
+             .set(lecture)
+             .addOnSuccessListener {
+                 Log.d("ChapterRepository", "Successfully added lecture")
                 }
-                .addOnFailureListener {
+             .addOnFailureListener {
                     Log.d("ChapterRepository", "Failure adding Lecture: $it")
                 }
+
+    }
+
+    private suspend fun updateInBackground(lecture: Lecture){
+        db.collection(collectionRoot).document("${lecture.ofChapter}")
+            .get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    collectionRef.document("${lecture.ofChapter}")
+                        .set(lecture)
+                        .addOnSuccessListener {
+                            Log.i(TAG, "Lecture Updated")
+                        }
+                } else {
+                    Log.i(TAG, "Lecture doesn't exists")
+                }
+            }
+    }
+    private suspend fun deleteInBackground(lecture: Lecture){
+        db.collection(collectionRoot).document("${lecture.ofChapter}")
+            .delete()
+    }
+    suspend fun insert(lecture: Lecture, lectureImage: Uri?) {
+        if (lecture.isValid())
+            insertInBackground(lecture, lectureImage)
+    }
+
+    suspend fun delete(lecture: Lecture) {
+        if (lecture.isValid())
+            deleteInBackground(lecture)
+    }
+
+    suspend fun update(lecture: Lecture) {
+        if (lecture.isValid()) {
+            updateInBackground(lecture)
         }
     }
-    fun insert(lecture: Lecture) {
-        InsertAsyncTask().execute(InsertData(db, lecture))
-    }
 
-    fun delete(chapter: Chapter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    fun update(chapter: Chapter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    fun getAllChapters(standard: String, subject: Int): Query{
-        Log.d(TAG, "$standard: $subject")
-        return db.collection(collectionRoot)
-            .whereEqualTo("standard", standard)
-            .whereEqualTo("subject", subject)
-    }
-}
-
-class LectureRepository(resources: Resources): LectureDAO {
-    private val lectureArray = arrayListOf(
-        "Lecture 1: Electric Current and drift velocity",
-        "Lecture 2: Resistivity - defination and formula",
-        "Lecture 3: Colour Resistivity of carbon Resistance"
-    )
-    private val imageArray = arrayListOf(
-        BitmapFactory.decodeResource(resources, R.drawable.physics),
-        BitmapFactory.decodeResource(resources, R.drawable.phy),
-        BitmapFactory.decodeResource(resources, R.drawable.electostatics)
-    )
-
-    private var lectureLiveData: MutableLiveData<List<LectureData>> = MutableLiveData()
-
-    init {
-        val listStr = ArrayList<String>()
-        listStr.addAll(lectureArray)
-        val lectures = ArrayList<LectureData>()
-        for (i in 0..(listStr.size - 1)) {
-            lectures.add(LectureData(i.toString(), listStr[i], imageArray[i]))
+    fun getAllChapters(standard: String, subject: String, chapterNumber: Int): Query{
+        val subjectKey = SubjectNumber.toKey(subject)
+        Log.d(TAG, "$standard: $subjectKey: $subject")
+        return if (chapterNumber == -1) {
+            db.collection(collectionRoot)
+                .whereEqualTo("standard", standard)
+                .whereEqualTo("subject", subjectKey)
+        } else {
+            db.collection(collectionRoot)
+                .whereEqualTo("standard", standard)
+                .whereEqualTo("subject", subjectKey)
+                .whereEqualTo("ofChapter", chapterNumber)
         }
-        lectureLiveData.value = lectures
     }
-    override fun insert(lecture: LectureData) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun delete(lecture: LectureData) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun update(lecture: LectureData) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getAllLectures(): MutableLiveData<List<LectureData>> {
-
-        return lectureLiveData
-    }
-
 }

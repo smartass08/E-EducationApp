@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sliderAdapter: SliderPageAdapter
     private val continueWatchingDataArray = arrayListOf<ContinueWatchingData>()
     private val sliderDataArray = arrayListOf<SliderData>()
-    private val db = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,8 +101,9 @@ class MainActivity : AppCompatActivity() {
     @SuppressWarnings
     fun onSubjectButtonClicked(view: View){
         val text = ((view as CardView).getChildAt(0) as TextView).text.toString()
+        val data = SubjectNumber.toKey(text)
         val intent = Intent(this, SubjectsActivity::class.java).apply {
-            putExtra("subject", text)
+            putExtra("subject", data)
         }
         startActivity(intent)
     }

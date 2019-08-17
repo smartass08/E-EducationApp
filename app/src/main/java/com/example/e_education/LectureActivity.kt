@@ -16,15 +16,18 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.e_education.models.ChaptersViewModel
+import com.example.e_education.models.Lecture
+import com.example.e_education.models.User
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.LectureRecyclerViewAdapter
-import com.example.e_education.models.LectureViewModel
+import com.example.e_education.utils.SubjectNumber
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_chapters.*
+import kotlinx.android.synthetic.main.activity_lecture.*
 
 class LectureActivity : AppCompatActivity() {
 
-    lateinit var model: LectureViewModel
+    lateinit var model: ChaptersViewModel
     private val auth = FirebaseAuth.getInstance()
     private val currUser = auth.currentUser
     private val TAG = "LectureActivity"
@@ -40,30 +43,43 @@ class LectureActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecture)
-        title = intent.getStringExtra("chapter")
+        val mTitle = intent.getStringExtra("chapter")
+        title = mTitle
 
         // Initiating the Data model
-        model = ViewModelProviders.of(this).get(LectureViewModel::class.java)
-        model.init(resources)
-        // Initiate recyclerView
-        val recyclerView: RecyclerView = findViewById(R.id.lectureRecyclerView)
-        val adapter = LectureRecyclerViewAdapter()
-        recyclerView.adapter = adapter
-        model.getLectureList().observe(this, Observer {
-            adapter.setData(ArrayList(it))
-            Log.d("tag", it.toString())
-        })
-        recyclerView.layoutManager = LinearLayoutManager(
-                applicationContext,
-                RecyclerView.VERTICAL,
-                false
-            )
-        recyclerView.addItemDecoration(
-                DividerItemDecoration(
-                    this,
-                    DividerItemDecoration.VERTICAL
+        model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
+        model.currUser.observe(this, Observer<User> {
+            if (model.authUser != null && model.authUser?.uid == BuildConfig.AdminUID) {
+                Log.d(TAG, "Admin")
+                publishButton.show()
+            }
+            if (it != null) {
+                model.init(it.standard, intent.getIntExtra("subject", -1),
+                    intent.getStringExtra("chapterNum").toInt())
+
+                // Initiate recyclerView
+                val recyclerView: RecyclerView = findViewById(R.id.lectureRecyclerView)
+                val adapter = LectureRecyclerViewAdapter()
+                recyclerView.adapter = adapter
+
+                model.getChapterList()?.observe(this, Observer<List<Lecture>> {
+
+                    adapter.setData(ArrayList(it))
+                    Log.d("tag", it.toString())
+                })
+                recyclerView.layoutManager = LinearLayoutManager(
+                    applicationContext,
+                    RecyclerView.VERTICAL,
+                    false
                 )
-            )
+                recyclerView.addItemDecoration(
+                    DividerItemDecoration(
+                        this,
+                        DividerItemDecoration.VERTICAL
+                    )
+                )
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

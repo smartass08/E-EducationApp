@@ -45,6 +45,7 @@
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -62,6 +63,7 @@
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
@@ -75,12 +77,14 @@
                 android:focusable="true"
                 android:foreground="?attr/actionBarItemBackground"
                 android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TitleTextDarkMode"
                 android:layout_marginTop="8dp"
-                android:text="Or"/>
+                android:text="Or" />
+
             <Button
                 android:id="@+id/email_register_button"
                 style="@style/AppButton"

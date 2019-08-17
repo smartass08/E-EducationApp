@@ -20,31 +20,35 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <EditText
         android:id="@+id/fullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:inputType="textPersonName"
-        android:hint="@string/YourName"/>
+        android:hint="@string/YourName" />
+
     <EditText
         android:id="@+id/formInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:inputType="text"
-        android:hint="@string/yourFormNumber"/>
+        android:hint="@string/yourFormNumber" />
+
     <Spinner
         android:id="@+id/classSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/AppButton"
         android:layout_gravity="center_horizontal"
-        android:text="Next"/>
+        android:text="Next" />
 
 
 </LinearLayout>

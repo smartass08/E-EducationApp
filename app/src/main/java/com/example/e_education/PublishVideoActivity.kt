@@ -1,34 +1,65 @@
 package com.example.e_education
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.RadioButton
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.e_education.utils.ActivityIndex
-import com.example.e_education.models.Chapter
 import com.example.e_education.models.ChaptersViewModel
 import com.example.e_education.models.Lecture
+import com.example.e_education.utils.SubjectNumber
 import com.example.e_education.utils.toast
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_publish_video.*
+import java.io.ByteArrayOutputStream
+import java.util.regex.Pattern
 
 class PublishVideoActivity : AppCompatActivity(){
 
     private val TAG = "PublishVideoActivity"
     private lateinit var model: ChaptersViewModel
-    private var chapter: Chapter = Chapter()
-    private var db = FirebaseFirestore.getInstance()
+    private var chapter = Lecture()
+    var uri: Uri? = null
 
+    companion object {
+        private const val imagePickerRequest = 100
+        private val permissionArr = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+    private fun getPhoto(){
+        if (permissionGranted()) {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, imagePickerRequest)
+        } else {
+            ActivityCompat.requestPermissions(this, permissionArr, imagePickerRequest)
+        }
+    }
+
+    private fun permissionGranted(): Boolean{
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_publish_video)
         title = "Publish a New Video"
+        val standard = intent.getStringExtra("standard")
+        val subject = intent.getIntExtra("subject", -1)
         model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
+        model.init(standard, subject)
         val parentActivity = intent.getIntExtra("activity", ActivityIndex.ChaptersActivity)
         if (parentActivity == ActivityIndex.ChaptersActivity) {
             radio_newChapter.isChecked = true
@@ -44,57 +75,90 @@ class PublishVideoActivity : AppCompatActivity(){
         subjectSpinner.adapter = ArrayAdapter<String>(this,
             android.R.layout.simple_spinner_dropdown_item,
             resources.getStringArray(R.array.subjects))
+
+        uploadImage.setOnClickListener {
+            Log.d(TAG, "clicked")
+            getPhoto()
+        }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            imagePickerRequest ->
+            {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    getPhoto()
 
-    fun onRadioButtonClicked(view: View){
-        if (view.id == R.id.radio_existing) {
-            newChapterNameField.visibility = View.GONE
-            chapterSpinner.visibility = View.VISIBLE
-            model.getChapterList()?.observe(this, Observer<List<Chapter>> {
-                val list = arrayListOf("Select existing Chapter")
-                for (i in it){
-                    list.add(i.chapterName)
+                } else {
+                    uploadImage.isClickable = false
                 }
-                chapterSpinner.adapter = ArrayAdapter<String>(
-                    this,
-                    android.R.layout.simple_spinner_dropdown_item, list)
-            })
-
+            }
+            else -> return
         }
+    }
 
-        else if (view.id == radio_newChapter.id) {
-            chapterSpinner.visibility = View.GONE
-            newChapterNameField.visibility = View.VISIBLE
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK){
+            if (requestCode == imagePickerRequest && data != null){
+                uri = data.data
+                uploadImage.setImageBitmap(MediaStore.Images.Media.getBitmap(this.contentResolver, uri))
+            }
         }
-        chapterSpinner.adapter = ArrayAdapter<String>(
-            this, android.R.layout.simple_spinner_dropdown_item,
-            resources.getStringArray(R.array.classes)
-        )
+    }
+    fun onRadioButtonClicked(view: View){
+        if (view is RadioButton) {
+            val checked = view.isChecked
+
+            if (view.id == R.id.radio_existing && checked) {
+                newChapterNameField.visibility = View.GONE
+                chapterSpinner.visibility = View.VISIBLE
+                chapterNum.visibility = View.GONE
+                model.getChapterList()?.observe(this, Observer<List<Lecture>> {
+                    val list = arrayListOf("Select existing Chapter")
+                    for (i in it) {
+                        list.add("${i.ofChapter}: ${i.chapterName}")
+                    }
+                    chapterSpinner.adapter = ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item, list.distinct()
+                    )
+                })
+
+            } else if (view.id == radio_newChapter.id && checked) {
+                chapterSpinner.visibility = View.GONE
+                newChapterNameField.visibility = View.VISIBLE
+                chapterNum.visibility = View.VISIBLE
+            }
+            chapterSpinner.adapter = ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.classes)
+            )
+        }
     }
 
     private fun isFormValid(): Boolean{
-        if (newChapterNameField.text.isEmpty() && !chapterSpinner.isSelected)
-        {
-            toast("Please enter chapter name or select from an existing one!")
-            return false
-        }
         if (youtubeURLField.text.isEmpty())
         {
             toast("Please enter a valid URL!")
-            return false
-        }
-        if (chapterNum.text.isEmpty()){
-            toast("Please enter lecture name!")
             return false
         }
         if (classSpinner.selectedItemPosition == 0){
             toast("Please select a class!", Toast.LENGTH_LONG)
             return false
         }
-        if (radio_newChapter.isSelected && chapterSpinner.selectedItemPosition == 0){
-                toast("Please select a chapter in which lecture is to be added!")
+        if (radio_newChapter.isSelected){
+            if (newChapterNameField.text.isEmpty() && !chapterSpinner.isSelected)
+            {
+                toast("Please enter chapter name or select from an existing one!")
                 return false
+            }
+            if (chapterNum.text.isEmpty()){
+                toast("Please enter lecture name!")
+                return false
+            }
         }
         if (radio_existing.isSelected){
             if (lectureNameField.text.isEmpty())
@@ -102,26 +166,35 @@ class PublishVideoActivity : AppCompatActivity(){
                 toast("Please enter lecture name!")
                 return false
             }
+            if (chapterSpinner.selectedItemPosition == 0) {
+                toast("Please select a chapter in which lecture is to be added!")
+                return false
+            }
         }
         return true
     }
     fun onPublishButtonClicked(view: View){
         if (isFormValid()){
-            if (radio_newChapter.isSelected){
+            if (radio_newChapter.isChecked){
+                Log.d(TAG, "Adding New chapter")
                 chapter.chapterName = newChapterNameField.text.toString()
-                chapter.chapterNumber = chapterNum.text.toString().toInt()
-            } else if (radio_existing.isSelected){
-                chapter.chapterName = (chapterSpinner.selectedItem as TextView).text.toString()
-                chapter.chapterNumber = chapterSpinner.selectedItemPosition
+                chapter.ofChapter = chapterNum.text.toString().toInt()
+            } else if (radio_existing.isChecked){
+
+                val pattern = Pattern.compile("[0-9]+")
+                val m = pattern.matcher(chapterSpinner.selectedItem as String)
+                m.find()
+                chapter.chapterName = (chapterSpinner.selectedItem as String).substring(m.end() + 2)
+                val num = (chapterSpinner.selectedItem as String).substring(m.start(), m.end()).toInt()
+                chapter.ofChapter = num
             }
 
-            chapter.standard = (classSpinner.selectedView as TextView).text.toString()
-            model.insert(chapter, Lecture(youtubeURLField.text.toString(),
-                lectureNameField.text.toString(),
-                chapterNum.text.toString().toInt(),
-                newChapterNameField.text.toString(),
-                ((classSpinner.selectedView) as TextView).text.toString(),
-                subjectSpinner.selectedItemPosition))
+            chapter.standard = classSpinner.selectedItem as String
+            chapter.id = youtubeURLField.text.toString()
+            chapter.lectureName = lectureNameField.text.toString()
+            chapter.standard = classSpinner.selectedItem as String
+            chapter.subject = SubjectNumber.toKey(subjectSpinner.selectedItem as String)
+            model.insert(chapter, uri)
             finish()
         } else {
             return

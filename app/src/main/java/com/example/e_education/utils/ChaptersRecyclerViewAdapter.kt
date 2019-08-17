@@ -8,17 +8,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import com.example.e_education.R
-import com.example.e_education.models.Chapter
+import com.example.e_education.models.Lecture
 import java.lang.StringBuilder
 
 
 class ChaptersRecyclerViewAdapter :
         RecyclerView.Adapter<ChaptersRecyclerViewAdapter.ChaptersViewHolder>(){
 
-    private var chapters: List<Chapter> = ArrayList()
-    private var oldChapters: List<Chapter> = ArrayList()
+    private var chapters: List<Lecture> = ArrayList()
+    private var oldChapters: List<Lecture> = ArrayList()
 
-    fun setData(data: List<Chapter>){
+    fun setData(data: List<Lecture>){
         oldChapters = chapters
         chapters = data
         val diffUtil = DiffUtil.calculateDiff(ChaptersDiffUtilCallback(oldChapters, chapters), true)
@@ -30,6 +30,9 @@ class ChaptersRecyclerViewAdapter :
     }
     fun getChapterNameTextView(view: View): TextView{
         return (view as LinearLayout).getChildAt(1) as TextView
+    }
+    fun getChapterNumTextView(view: View): TextView{
+        return (view as LinearLayout).getChildAt(0) as TextView
     }
     class ChaptersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val chapterName: TextView = itemView.findViewById(R.id.chapterNameTextView)
@@ -45,7 +48,7 @@ class ChaptersRecyclerViewAdapter :
 
     override fun onBindViewHolder(p0: ChaptersViewHolder, i: Int) {
         p0.chapterName.text = chapters[i].chapterName
-        p0.chapterNumber.text = StringBuilder("${i + 1}").toString()
+        p0.chapterNumber.text = "${chapters[i].ofChapter}"
         p0.chapterNameRoot.setOnClickListener(onClick)
     }
 }

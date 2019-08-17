@@ -17,31 +17,23 @@ data class SliderData(
     /*, val caption: String*/
 )
 
-data class Chapter (
-    var subject: String,
-    var chapterNumber: Int,
-    var chapterName: String,
-    var standard: String
-){
-    constructor(): this("",0, "", "")
-    companion object {
-        const val DB_FIELD_NAME = "chapters"
-    }
-}
-
-data class LectureData(
-    val id: String,
-    val lectureName: String,
-    val lectureImage: Bitmap
-)
 data class Lecture(
-    val id: String = "",
-    val lectureName: String = "",
-    val ofChapter: Int = -1,
-    val chapterName: String = "",
-    val standard: String = "",
-    val subject: Int = -1
-)
+    var id: String = "",
+    var lectureName: String = "",
+    var ofChapter: Int = -1,
+    var chapterName: String = "",
+    var standard: String = "",
+    var subject: Int = -1,
+    var imgUrl: String = ""
+){
+    fun isValid(): Boolean =
+            ofChapter != -1 &&
+            id.isNotEmpty() &&
+            chapterName.isNotEmpty() &&
+            standard.isNotEmpty() &&
+            subject != -1 &&
+            lectureName.isNotEmpty()
+}
 
 data class User(
     val name: String,
