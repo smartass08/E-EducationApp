@@ -3,25 +3,24 @@ package com.example.e_education
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.e_education.adapter.LectureRecyclerViewAdapter
 import com.example.e_education.models.ChaptersViewModel
 import com.example.e_education.models.Lecture
 import com.example.e_education.models.User
 import com.example.e_education.utils.ActivityIndex
-import com.example.e_education.utils.LectureRecyclerViewAdapter
-import com.example.e_education.utils.SubjectNumber
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lecture.*
 
@@ -63,9 +62,9 @@ class LectureActivity : AppCompatActivity() {
                 recyclerView.adapter = adapter
 
                 model.getChapterList()?.observe(this, Observer<List<Lecture>> {
-
-                    adapter.setData(ArrayList(it))
-                    Log.d("tag", it.toString())
+                    val data = it.sortedBy { it.lectureName }
+                    adapter.setData(ArrayList(data))
+                    Log.d("tag", data.toString())
                 })
                 recyclerView.layoutManager = LinearLayoutManager(
                     applicationContext,

@@ -44,4 +44,7 @@
     <string name="title_activity_new_user_info_collection">NewUserInfoCollectionActivity</string>
     <string name="YourName">Enter Your name</string>
     <string name="yourFormNumber">Enter your form number</string>
+
+    <!-- Upload dialogue strings -->
+    <string name="upload_dialogue_title">Adding Lecture, Please Wait!</string>
 </resources>

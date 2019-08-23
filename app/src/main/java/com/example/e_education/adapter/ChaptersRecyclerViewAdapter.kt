@@ -1,15 +1,15 @@
-package com.example.e_education.utils
+package com.example.e_education.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.example.e_education.R
 import com.example.e_education.models.Lecture
-import java.lang.StringBuilder
+import com.example.e_education.utils.ChaptersDiffUtilCallback
 
 
 class ChaptersRecyclerViewAdapter :
@@ -21,7 +21,12 @@ class ChaptersRecyclerViewAdapter :
     fun setData(data: List<Lecture>){
         oldChapters = chapters
         chapters = data
-        val diffUtil = DiffUtil.calculateDiff(ChaptersDiffUtilCallback(oldChapters, chapters), true)
+        val diffUtil = DiffUtil.calculateDiff(
+            ChaptersDiffUtilCallback(
+                oldChapters,
+                chapters
+            ), true
+        )
         diffUtil.dispatchUpdatesTo(this)
     }
     private var onClick: (view: View) -> Unit = {}

@@ -1,7 +1,5 @@
 package com.example.e_education.models
 
-import android.graphics.Bitmap
-
 
 // This file defines all the data classes for the ViewModel classes of the application
 
@@ -24,7 +22,7 @@ data class Lecture(
     var chapterName: String = "",
     var standard: String = "",
     var subject: Int = -1,
-    var imgUrl: String = ""
+    var imgRef: String = ""
 ){
     fun isValid(): Boolean =
             ofChapter != -1 &&

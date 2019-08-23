@@ -1,17 +1,17 @@
-package com.example.e_education.utils
+package com.example.e_education.adapter
 
 import android.app.AlertDialog
-import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.view.View
-import android.widget.TextView
-import com.example.e_education.R
-import android.view.WindowManager
 import android.content.Context
 import android.graphics.Point
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
+import com.example.e_education.R
 import com.example.e_education.models.ContinueWatchingData
 
 class ContinueWatchingListAdapter(private val context: Context, private val data: ArrayList<ContinueWatchingData>)
@@ -44,7 +44,7 @@ class ContinueWatchingListAdapter(private val context: Context, private val data
 
     override fun getItemCount(): Int = data.size
 
-    override fun onBindViewHolder(holder: ContinueWatchingListAdapter.mViewHolder, at: Int) {
+    override fun onBindViewHolder(holder: mViewHolder, at: Int) {
         holder.captionTextView.text = data[at].caption
         holder.lectureImageView.setImageResource(data[at].image)
 

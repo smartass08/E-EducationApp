@@ -1,51 +1,48 @@
 package com.example.e_education.models.repository
 
-import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.e_education.models.Lecture
+import com.example.e_education.models.UploadListener
 import com.example.e_education.utils.SubjectNumber
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageMetadata
-import java.io.File
-import java.util.UUID
+import java.util.*
 
 class ChapterRepository{
 
     companion object {
         const val collectionRoot = "chapters"
-        const val lecturePath = "lectures"
     }
+
+    val uplaodProgress: MutableLiveData<Long> = MutableLiveData()
     private val TAG = "ChapterRepository"
     private val db = FirebaseFirestore.getInstance()
     private val collectionRef = db.collection(collectionRoot)
     private val storageRef = FirebaseStorage.getInstance().reference
-
-    private suspend fun insertInBackground(lecture: Lecture, lectureImage: Uri?){
-        if (lectureImage != null){
-            val file = Uri.fromFile(File(lectureImage.path))
-            val metadata = StorageMetadata.Builder()
-                .setContentType("image/jpeg")
-                .build()
-            val ref = storageRef.child("${lecture.ofChapter}/${UUID.randomUUID()}.jpg")
-            val uploadTask = ref.putFile(file, metadata)
+    var uploadListener: UploadListener? = null
+    private suspend fun insertInBackground(lecture: Lecture, imageData: ByteArray) {
+        val fileExtension = "jpg"
+        lecture.imgRef = "${lecture.ofChapter}/${UUID.randomUUID()}.$fileExtension"
+        val ref = storageRef.child(lecture.imgRef)
+        val uploadTask = ref.putBytes(imageData)
+            .addOnProgressListener {
+                uplaodProgress.value = (100 * it.bytesTransferred) / it.totalByteCount
+            }
             uploadTask.addOnSuccessListener {
                 Log.d(TAG, it.storage.downloadUrl.toString())
+                db.collection(collectionRoot).document()
+                    .set(lecture)
+                    .addOnSuccessListener {
+                        uploadListener!!.onUploadComplete()
+                    }
+                    .addOnFailureListener {
+                        uploadListener!!.onUploadFailed("Failure adding Lecture: $it")
+                    }
             }.addOnFailureListener {
                 Log.d(TAG, it.message)
             }
-        }
-
-        db.collection(collectionRoot).document()
-             .set(lecture)
-             .addOnSuccessListener {
-                 Log.d("ChapterRepository", "Successfully added lecture")
-                }
-             .addOnFailureListener {
-                    Log.d("ChapterRepository", "Failure adding Lecture: $it")
-                }
-
     }
 
     private suspend fun updateInBackground(lecture: Lecture){
@@ -67,9 +64,13 @@ class ChapterRepository{
         db.collection(collectionRoot).document("${lecture.ofChapter}")
             .delete()
     }
-    suspend fun insert(lecture: Lecture, lectureImage: Uri?) {
+
+    suspend fun insert(lecture: Lecture, lectureImage: ByteArray) {
+        uploadListener!!.onUploadStarted()
         if (lecture.isValid())
             insertInBackground(lecture, lectureImage)
+        else
+            uploadListener!!.onUploadFailed("Invalid input! Please check your input properly")
     }
 
     suspend fun delete(lecture: Lecture) {

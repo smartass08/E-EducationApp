@@ -2,43 +2,83 @@ package com.example.e_education
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.models.ChaptersViewModel
 import com.example.e_education.models.Lecture
+import com.example.e_education.models.UploadListener
+import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.SubjectNumber
 import com.example.e_education.utils.toast
 import kotlinx.android.synthetic.main.activity_publish_video.*
 import java.io.ByteArrayOutputStream
 import java.util.regex.Pattern
 
-class PublishVideoActivity : AppCompatActivity(){
+class PublishVideoActivity : AppCompatActivity(), UploadListener {
 
     private val TAG = "PublishVideoActivity"
     private lateinit var model: ChaptersViewModel
     private var chapter = Lecture()
-    var uri: Uri? = null
-
     companion object {
         private const val imagePickerRequest = 100
         private val permissionArr = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
+
+    override fun onUploadStarted() {
+        hideKeyboard(this)
+        val layout = LayoutInflater.from(this).inflate(R.layout.upload_progress, null)
+        AlertDialog.Builder(this)
+            .setView(layout)
+            .setCancelable(false)
+            .create()
+            .show()
+        val uploadProgressBar: ProgressBar = layout.findViewById(R.id.uploadProgressBar)
+        model.uploadProgress.observe(this, Observer<Long> {
+            uploadProgressBar.progress = it.toInt()
+        })
+        toast("Starting Upload")
+        publishButton.isClickable = false
+    }
+
+    override fun onUploadComplete() {
+        toast("Upload Complete", Toast.LENGTH_SHORT)
+        finish()
+    }
+
+    override fun onUploadFailed(msg: String) {
+        toast(msg)
+        publishButton.isClickable = true
+    }
+
+    private fun hideKeyboard(activity: Activity) {
+        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view = activity.currentFocus
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = View(activity)
+        }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
     private fun getPhoto(){
         if (permissionGranted()) {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -60,6 +100,7 @@ class PublishVideoActivity : AppCompatActivity(){
         val subject = intent.getIntExtra("subject", -1)
         model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
         model.init(standard, subject)
+        model.chapterRepos.uploadListener = this
         val parentActivity = intent.getIntExtra("activity", ActivityIndex.ChaptersActivity)
         if (parentActivity == ActivityIndex.ChaptersActivity) {
             radio_newChapter.isChecked = true
@@ -103,8 +144,8 @@ class PublishVideoActivity : AppCompatActivity(){
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK){
             if (requestCode == imagePickerRequest && data != null){
-                uri = data.data
-                uploadImage.setImageBitmap(MediaStore.Images.Media.getBitmap(this.contentResolver, uri))
+
+                uploadImage.setImageBitmap(MediaStore.Images.Media.getBitmap(this.contentResolver, data.data))
             }
         }
     }
@@ -194,8 +235,12 @@ class PublishVideoActivity : AppCompatActivity(){
             chapter.lectureName = lectureNameField.text.toString()
             chapter.standard = classSpinner.selectedItem as String
             chapter.subject = SubjectNumber.toKey(subjectSpinner.selectedItem as String)
-            model.insert(chapter, uri)
-            finish()
+            val drawable = (uploadImage.drawable) as BitmapDrawable
+            val baos = ByteArrayOutputStream()
+            val bitmap = drawable.bitmap
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            model.insert(chapter, data)
         } else {
             return
         }

@@ -3,24 +3,22 @@ package com.example.e_education
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.SearchView
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.e_education.utils.ActivityIndex
-import com.example.e_education.utils.ChaptersRecyclerViewAdapter
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.e_education.adapter.ChaptersRecyclerViewAdapter
 import com.example.e_education.models.ChaptersViewModel
 import com.example.e_education.models.Lecture
 import com.example.e_education.models.User
+import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.SubjectNumber
 import kotlinx.android.synthetic.main.activity_chapters.*
 
@@ -56,7 +54,7 @@ class SubjectsActivity : AppCompatActivity() {
                         adapter?.setData(emptyList())
                     } else {
                         val data = it.distinctBy { it.ofChapter }
-                        adapter?.setData(data)
+                        adapter?.setData(data.sortedBy { it.ofChapter })
                         Log.d(TAG, it.toString())
                     }
                 })

@@ -1,6 +1,5 @@
 package com.example.e_education.models
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,12 +10,18 @@ import com.example.e_education.utils.SubjectNumber
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+interface UploadListener {
+    fun onUploadStarted()
+    fun onUploadComplete()
+    fun onUploadFailed(msg: String)
+}
 class ChaptersViewModel: ViewModel(){
 
     private val TAG = "ChaptersViewModel"
     private var chapterData : MutableLiveData<List<Lecture>>? = MutableLiveData()
     private var filteredChapterData : MutableLiveData<List<Lecture>>? = MutableLiveData()
-    private val chapterRepos = ChapterRepository()
+    val chapterRepos = ChapterRepository()
+    val uploadProgress = chapterRepos.uplaodProgress
     private var subject: String? = null
     private var standard: String? = null
     val auth = FirebaseAuth.getInstance()
@@ -76,7 +81,9 @@ class ChaptersViewModel: ViewModel(){
         }
     }
 
-    fun insert(lecture: Lecture, lectureImage: Uri?) = Coroutines.main{ chapterRepos.insert(lecture, lectureImage) }
+    fun insert(lecture: Lecture, lectureImage: ByteArray) {
+        Coroutines.main { chapterRepos.insert(lecture, lectureImage) }
+    }
     fun delete(chapter: Lecture) =  Coroutines.main { chapterRepos.delete(chapter) }
     fun update(chapter: Lecture) = Coroutines.main { chapterRepos.update(chapter) }
 }
