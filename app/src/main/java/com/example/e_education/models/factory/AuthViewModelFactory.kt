@@ -1,7 +1,8 @@
-package com.example.e_education.models
+package com.example.e_education.models.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.e_education.models.AuthenticationViewModel
 import com.example.e_education.models.AuthenticationViewModel.AuthListener
 
 @Suppress("UNCHECKED_CAST")

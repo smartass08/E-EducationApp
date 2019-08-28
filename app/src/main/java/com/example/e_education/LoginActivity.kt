@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.e_education.models.AuthViewModelFactory
+import com.example.e_education.models.AuthenticationViewModel
+import com.example.e_education.models.AuthenticationViewModel.AuthListener
 import com.example.e_education.models.IntentData
 import com.example.e_education.models.User
-import com.example.e_education.models.repository.AuthenticationViewModel
-import com.example.e_education.models.repository.AuthenticationViewModel.AuthListener
+import com.example.e_education.models.factory.AuthViewModelFactory
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.putExtra
 import com.example.e_education.utils.toast
