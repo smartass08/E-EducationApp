@@ -23,10 +23,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.e_education.models.ChaptersViewModel
+import com.example.e_education.models.IntentData
 import com.example.e_education.models.Lecture
 import com.example.e_education.models.UploadListener
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.SubjectNumber
+import com.example.e_education.utils.getExtra
 import com.example.e_education.utils.toast
 import kotlinx.android.synthetic.main.activity_publish_video.*
 import java.io.ByteArrayOutputStream
@@ -41,6 +43,8 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         private const val imagePickerRequest = 100
         private val permissionArr = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
+
+    private var data: IntentData? = null
 
     override fun onUploadStarted() {
         hideKeyboard(this)
@@ -96,12 +100,11 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_publish_video)
         title = "Publish a New Video"
-        val standard = intent.getStringExtra("standard")
-        val subject = intent.getIntExtra("subject", -1)
+        data = intent.getExtra(IntentData.name, IntentData::class.java)
         model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
-        model.init(standard, subject)
+        model.init(data!!.user.standard, data!!.subject)
         model.chapterRepos.uploadListener = this
-        val parentActivity = intent.getIntExtra("activity", ActivityIndex.ChaptersActivity)
+        val parentActivity = data!!.activityIndex
         if (parentActivity == ActivityIndex.ChaptersActivity) {
             radio_newChapter.isChecked = true
             onRadioButtonClicked(radio_newChapter)

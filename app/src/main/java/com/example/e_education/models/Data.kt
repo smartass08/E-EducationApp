@@ -45,3 +45,17 @@ data class User(
         const val USER_FIELD_NAME = "users"
     }
 }
+
+class IntentData(
+    val user: User,
+    val subject: Int,
+    val activityIndex: Int
+) {
+    constructor() : this(User(), -1, -1)
+    constructor(data: IntentData) : this(data.user, data.subject, data.activityIndex)
+    constructor(data: IntentData, activityIndex: Int) : this(data.user, data.subject, activityIndex)
+
+    companion object {
+        const val name = "intent-data"
+    }
+}

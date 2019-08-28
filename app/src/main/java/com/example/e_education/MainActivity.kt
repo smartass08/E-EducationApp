@@ -16,8 +16,12 @@ import androidx.viewpager.widget.ViewPager
 import com.example.e_education.adapter.ContinueWatchingListAdapter
 import com.example.e_education.adapter.SliderPageAdapter
 import com.example.e_education.models.ContinueWatchingData
+import com.example.e_education.models.IntentData
 import com.example.e_education.models.SliderData
+import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.SubjectNumber
+import com.example.e_education.utils.getExtra
+import com.example.e_education.utils.putExtra
 import com.google.firebase.auth.FirebaseAuth
 import me.relex.circleindicator.CircleIndicator
 import kotlin.math.max
@@ -105,9 +109,10 @@ class MainActivity : AppCompatActivity() {
     @SuppressWarnings
     fun onSubjectButtonClicked(view: View){
         val text = ((view as CardView).getChildAt(0) as TextView).text.toString()
-        val data = SubjectNumber.toKey(text)
+        val d = intent.getExtra(IntentData.name, IntentData::class.java)
+        val data = IntentData(d.user, SubjectNumber.toKey(text), ActivityIndex.MainActivity)
         val intent = Intent(this, SubjectsActivity::class.java).apply {
-            putExtra("subject", data)
+            putExtra(IntentData.name, data)
         }
         startActivity(intent)
     }

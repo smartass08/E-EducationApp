@@ -18,9 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.e_education.adapter.LectureRecyclerViewAdapter
 import com.example.e_education.models.ChaptersViewModel
+import com.example.e_education.models.IntentData
 import com.example.e_education.models.Lecture
 import com.example.e_education.models.User
 import com.example.e_education.utils.ActivityIndex
+import com.example.e_education.utils.getExtra
+import com.example.e_education.utils.putExtra
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lecture.*
 
@@ -30,7 +33,7 @@ class LectureActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val currUser = auth.currentUser
     private val TAG = "LectureActivity"
-
+    private var data: IntentData? = null
 
     override fun onStart() {
         super.onStart()
@@ -42,6 +45,7 @@ class LectureActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecture)
+        data = intent.getExtra(IntentData.name, IntentData::class.java)
         val mTitle = intent.getStringExtra("chapter")
         title = mTitle
 
@@ -53,7 +57,8 @@ class LectureActivity : AppCompatActivity() {
                 publishButton.show()
             }
             if (it != null) {
-                model.init(it.standard, intent.getIntExtra("subject", -1),
+                model.init(
+                    data!!.user.standard, data!!.subject,
                     intent.getStringExtra("chapterNum").toInt())
 
                 // Initiate recyclerView
@@ -105,7 +110,7 @@ class LectureActivity : AppCompatActivity() {
 
     fun onAddButtonClicked(view: View){
         val intent = Intent(this, PublishVideoActivity::class.java)
-        intent.putExtra("activity", ActivityIndex.LectureActivity)
+        intent.putExtra(IntentData.name, IntentData(data!!, ActivityIndex.LectureActivity))
         startActivity(intent)
     }
 }
