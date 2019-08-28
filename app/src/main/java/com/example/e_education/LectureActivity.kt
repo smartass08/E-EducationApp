@@ -20,7 +20,7 @@ import com.example.e_education.adapter.LectureRecyclerViewAdapter
 import com.example.e_education.models.ChaptersViewModel
 import com.example.e_education.models.IntentData
 import com.example.e_education.models.Lecture
-import com.example.e_education.models.User
+import com.example.e_education.models.factory.ChaptersViewModelFactory
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.getExtra
 import com.example.e_education.utils.putExtra
@@ -50,17 +50,17 @@ class LectureActivity : AppCompatActivity() {
         title = mTitle
 
         // Initiating the Data model
-        model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
-        model.currUser.observe(this, Observer<User> {
+        val provider = ChaptersViewModelFactory(
+            data!!.user.standard,
+            data!!.subject,
+            intent.getStringExtra("chapterNum").toInt()
+        )
+
+        model = ViewModelProviders.of(this, provider).get(ChaptersViewModel::class.java)
             if (model.authUser != null && model.authUser?.uid == BuildConfig.AdminUID) {
                 Log.d(TAG, "Admin")
                 publishButton.show()
             }
-            if (it != null) {
-                model.init(
-                    data!!.user.standard, data!!.subject,
-                    intent.getStringExtra("chapterNum").toInt())
-
                 // Initiate recyclerView
                 val recyclerView: RecyclerView = findViewById(R.id.lectureRecyclerView)
                 val adapter = LectureRecyclerViewAdapter()
@@ -83,8 +83,6 @@ class LectureActivity : AppCompatActivity() {
                     )
                 )
             }
-        })
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_action_bar, menu)

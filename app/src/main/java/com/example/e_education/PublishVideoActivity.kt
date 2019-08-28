@@ -26,6 +26,7 @@ import com.example.e_education.models.ChaptersViewModel
 import com.example.e_education.models.IntentData
 import com.example.e_education.models.Lecture
 import com.example.e_education.models.UploadListener
+import com.example.e_education.models.factory.ChaptersViewModelFactory
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.SubjectNumber
 import com.example.e_education.utils.getExtra
@@ -101,8 +102,8 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         setContentView(R.layout.activity_publish_video)
         title = "Publish a New Video"
         data = intent.getExtra(IntentData.name, IntentData::class.java)
-        model = ViewModelProviders.of(this).get(ChaptersViewModel::class.java)
-        model.init(data!!.user.standard, data!!.subject)
+        val provider = ChaptersViewModelFactory(data!!.user.standard, data!!.subject)
+        model = ViewModelProviders.of(this, provider).get(ChaptersViewModel::class.java)
         model.chapterRepos.uploadListener = this
         val parentActivity = data!!.activityIndex
         if (parentActivity == ActivityIndex.ChaptersActivity) {

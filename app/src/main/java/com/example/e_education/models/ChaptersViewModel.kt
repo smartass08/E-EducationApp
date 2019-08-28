@@ -15,19 +15,18 @@ interface UploadListener {
     fun onUploadComplete()
     fun onUploadFailed(msg: String)
 }
-class ChaptersViewModel: ViewModel(){
+
+class ChaptersViewModel(private var standard: String, private var subject: Int, private var chapter: Int = -1) :
+    ViewModel() {
 
     private val TAG = "ChaptersViewModel"
     private var chapterData : MutableLiveData<List<Lecture>>? = MutableLiveData()
     private var filteredChapterData : MutableLiveData<List<Lecture>>? = MutableLiveData()
     val chapterRepos = ChapterRepository()
     val uploadProgress = chapterRepos.uplaodProgress
-    private var subject: String? = null
-    private var standard: String? = null
     val auth = FirebaseAuth.getInstance()
     val authUser = auth.currentUser
     val db = FirebaseFirestore.getInstance()
-    private var chapter: Int = -1
 
     val currUser = object: LiveData<User>() {
         override fun onActive() {
@@ -42,16 +41,12 @@ class ChaptersViewModel: ViewModel(){
         }
 
     init {
-        Log.d("log", "created")
-    }
-    fun init(standard: String, subject: Int, chapterNumber: Int = -1){
-        this.subject = SubjectNumber.toString(subject)
-        this.standard = standard
-        this.chapter = chapterNumber
         chapterData?.value = getChapterList()?.value
     }
+
     fun getChapterList(): MutableLiveData<List<Lecture>>? {
-        chapterRepos.getAllChapters(standard!!, subject!!, chapter).addSnapshotListener{ value, e ->
+        chapterRepos.getAllChapters(standard, SubjectNumber.toString(subject), chapter)
+            .addSnapshotListener { value, e ->
             if (e != null){
                 filteredChapterData?.value = null
                 chapterData?.value = null
