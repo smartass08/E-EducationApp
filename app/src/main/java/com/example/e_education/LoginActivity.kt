@@ -16,9 +16,6 @@ import com.example.e_education.utils.putExtra
 import com.example.e_education.utils.toast
 import com.firebase.ui.auth.AuthUI
 
-/**
- * A login screen that offers login via email/password.
- */
 class LoginActivity : AppCompatActivity(), AuthListener {
 
     private var viewModel: AuthenticationViewModel? = null
@@ -38,6 +35,8 @@ class LoginActivity : AppCompatActivity(), AuthListener {
         })
         if (!viewModel!!.isLoggedIn()) {
             val loginIntent = AuthUI.getInstance().createSignInIntentBuilder()
+                .setLogo(R.drawable.logo)
+                .setTheme(R.style.LoginPage)
                 .setAvailableProviders(
                     arrayListOf(
                         AuthUI.IdpConfig.EmailBuilder().build(),
@@ -66,6 +65,7 @@ class LoginActivity : AppCompatActivity(), AuthListener {
         intent.putExtra(EMAIL_INTENT, viewModel?.getUserEmail())
         intent.putExtra(UID_INTENT, viewModel?.getUserUID())
         startActivity(intent)
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
