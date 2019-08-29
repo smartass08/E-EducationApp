@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity(), AuthListener {
 
     private var viewModel: AuthenticationViewModel? = null
     private val factory = AuthViewModelFactory(this)
-    private var user: User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(AuthenticationViewModel::class.java)
