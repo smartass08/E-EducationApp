@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:id="@id/exo_play"
+        android:layout_width="wrap_content"
+        style="@style/ExoMediaButton.Play"
+        android:layout_height="wrap_content"
+        android:src="@drawable/player_play"
+        android:layout_gravity="center" />
+
+    <ImageButton
+        android:id="@+id/exo_pause"
+        android:layout_width="wrap_content"
+        style="@style/ExoMediaButton.Pause"
+        android:layout_height="wrap_content"
+        android:src="@drawable/player_pause"
+        android:layout_gravity="center" />
+
+    <com.google.android.exoplayer2.ui.DefaultTimeBar
+        android:id="@+id/exo_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_gravity="bottom"
+        app:played_color="@color/colorPrimary"
+        app:buffered_color="@android:color/white" />
+</FrameLayout>

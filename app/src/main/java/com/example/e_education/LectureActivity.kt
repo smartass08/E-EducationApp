@@ -3,6 +3,7 @@ package com.example.e_education
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -22,8 +23,12 @@ import com.example.e_education.models.IntentData
 import com.example.e_education.models.Lecture
 import com.example.e_education.models.factory.ChaptersViewModelFactory
 import com.example.e_education.utils.ActivityIndex
+import com.example.e_education.utils.MediaSourceFactory
 import com.example.e_education.utils.getExtra
 import com.example.e_education.utils.putExtra
+import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lecture.*
 
@@ -34,7 +39,6 @@ class LectureActivity : AppCompatActivity() {
     private val currUser = auth.currentUser
     private val TAG = "LectureActivity"
     private var data: IntentData? = null
-
     override fun onStart() {
         super.onStart()
         if (currUser != null && currUser.uid == BuildConfig.AdminUID){
@@ -49,6 +53,7 @@ class LectureActivity : AppCompatActivity() {
         val mTitle = intent.getStringExtra("chapter")
         title = mTitle
 
+        prepareExoPlayer()
         // Initiating the Data model
         val provider = ChaptersViewModelFactory(
             data!!.user.standard,
@@ -111,4 +116,28 @@ class LectureActivity : AppCompatActivity() {
         intent.putExtra(IntentData.name, IntentData(data!!, ActivityIndex.LectureActivity))
         startActivity(intent)
     }
+
+    private fun prepareExoPlayer() {
+        val player = ExoPlayerFactory.newSimpleInstance(this)
+        val media = MediaSourceFactory.build(
+            Uri.parse("https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4"),
+            this
+        )
+        player_view.player = player
+        player.playWhenReady = true
+        hideSystemUi()
+        player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+        player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+        player.prepare(media)
+    }
+
+    private fun hideSystemUi() {
+        player_view.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+    }
+
 }
