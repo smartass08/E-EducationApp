@@ -11,7 +11,6 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,10 +20,6 @@ import com.example.e_education.models.*
 import com.example.e_education.models.factory.ChaptersViewModelFactory
 import com.example.e_education.models.factory.VideoPlayerViewModelFactory
 import com.example.e_education.utils.*
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lecture.*
@@ -34,13 +29,14 @@ class LectureActivity : AppCompatActivity(),
     GestureDetector.OnGestureListener,
     GestureDetector.OnDoubleTapListener {
 
-    lateinit var model: ChaptersViewModel
+    private lateinit var model: ChaptersViewModel
     private val auth = FirebaseAuth.getInstance()
     private val currUser = auth.currentUser
     private val TAG = "LectureActivity"
     private var data: IntentData? = null
     private var videoModel: VideoPlayerViewModel? = null
     private var mGestureDetector: GestureDetector? = null
+    val adapter = LectureRecyclerViewAdapter()
     override fun onStart() {
         super.onStart()
         if (currUser != null && currUser.uid == BuildConfig.AdminUID){
@@ -54,11 +50,6 @@ class LectureActivity : AppCompatActivity(),
         data = intent.getExtra(IntentData.name, IntentData::class.java)
 
         mGestureDetector = android.view.GestureDetector(this, this)
-        val videoProvider = VideoPlayerViewModelFactory(this)
-        videoModel = ViewModelProviders.of(this, videoProvider).get(VideoPlayerViewModel::class.java)
-        player_view.player = videoModel?.getPlayer()
-        player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-        player_view.setOnTouchListener(this)
 
         // Initiating the Data model
         val provider = ChaptersViewModelFactory(
@@ -68,15 +59,24 @@ class LectureActivity : AppCompatActivity(),
         )
 
         model = ViewModelProviders.of(this, provider).get(ChaptersViewModel::class.java)
+
+        player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+        player_view.setOnTouchListener(this)
+
+
             if (model.authUser != null && model.authUser?.uid == BuildConfig.AdminUID) {
                 publishButton.show()
             }
                 // Initiate recyclerView
                 val recyclerView: RecyclerView = findViewById(R.id.lectureRecyclerView)
-                val adapter = LectureRecyclerViewAdapter()
                 recyclerView.adapter = adapter
-
+        adapter.setOnItemClickListener {
+            videoModel?.changeMedia(Uri.parse(adapter.getData(it).id))
+        }
                 model.getChapterList()?.observe(this, Observer<List<Lecture>> {
+                    val videoProvider = VideoPlayerViewModelFactory(this, Uri.parse(it[0].id))
+                    videoModel = ViewModelProviders.of(this, videoProvider).get(VideoPlayerViewModel::class.java)
+                    player_view.player = videoModel?.getPlayer()
                     adapter.setData(ArrayList(it))
                     data?.log(TAG)
                 })
@@ -172,5 +172,4 @@ class LectureActivity : AppCompatActivity(),
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
-
 }

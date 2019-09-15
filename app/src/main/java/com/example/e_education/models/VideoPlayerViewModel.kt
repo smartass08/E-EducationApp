@@ -12,21 +12,26 @@ import com.google.android.exoplayer2.ExoPlayerFactory
 import java.util.concurrent.TimeUnit
 
 
-class VideoPlayerViewModel(context: Context) : ViewModel() {
+class VideoPlayerViewModel(val context: Context, uri: Uri) : ViewModel() {
     private var playedDuration: Long = 0 // in ms
     private val mPlayer = ExoPlayerFactory.newSimpleInstance(context)
-    private val media = MediaSourceFactory.build(
-        Uri.parse("https://archive.org/download/Pbtestfilemp4videotestmp4/video_test_512kb.mp4"),
-        context
-    )
+    private var media = MediaSourceFactory.build(uri, context)
 
     init {
 
         mPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
         mPlayer.prepare(media)
+        resume()
     }
 
     fun getPlayer(): ExoPlayer = mPlayer
+
+    fun changeMedia(uri: Uri) {
+        media = MediaSourceFactory.build(uri, context)
+        mPlayer.prepare(media)
+        playedDuration = 0
+        resume()
+    }
 
     fun pause() {
         playedDuration = mPlayer.currentPosition
