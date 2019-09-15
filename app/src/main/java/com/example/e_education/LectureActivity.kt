@@ -13,15 +13,15 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.e_education.adapter.LectureRecyclerViewAdapter
-import com.example.e_education.models.ChaptersViewModel
-import com.example.e_education.models.IntentData
-import com.example.e_education.models.Lecture
+import com.example.e_education.models.*
 import com.example.e_education.models.factory.ChaptersViewModelFactory
+import com.example.e_education.models.factory.VideoPlayerViewModelFactory
 import com.example.e_education.utils.ActivityIndex
 import com.example.e_education.utils.MediaSourceFactory
 import com.example.e_education.utils.getExtra
@@ -41,7 +41,7 @@ class LectureActivity : AppCompatActivity() {
     private val currUser = auth.currentUser
     private val TAG = "LectureActivity"
     private var data: IntentData? = null
-    private var mPlayer: SimpleExoPlayer? = null
+    private var videoModel: VideoPlayerViewModel? = null
     override fun onStart() {
         super.onStart()
         if (currUser != null && currUser.uid == BuildConfig.AdminUID){
@@ -54,7 +54,11 @@ class LectureActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lecture)
         data = intent.getExtra(IntentData.name, IntentData::class.java)
 
-        prepareExoPlayer()
+        val videoProvider = VideoPlayerViewModelFactory(this)
+        videoModel = ViewModelProviders.of(this, videoProvider).get(VideoPlayerViewModel::class.java)
+        player_view.player = videoModel?.getPlayer()
+        player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+
         // Initiating the Data model
         val provider = ChaptersViewModelFactory(
             data!!.user.standard,
@@ -107,18 +111,15 @@ class LectureActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        videoModel?.prepareExoPlayer()
         hideSystemUi()
     }
 
-    override fun onPause() {
-        super.onPause()
-        mPlayer!!.stop()
-    }
+    /*  override fun onPause() {
+          super.onPause()
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mPlayer!!.release()
-    }
+      }*/
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.search_bar)
             Toast.makeText(applicationContext, "Not implemented", Toast.LENGTH_LONG).show()
@@ -131,19 +132,6 @@ class LectureActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun prepareExoPlayer() {
-        mPlayer = ExoPlayerFactory.newSimpleInstance(this)
-        val media = MediaSourceFactory.build(
-            Uri.parse("https://archive.org/download/Pbtestfilemp4videotestmp4/video_test_512kb.mp4"),
-            this
-        )
-        player_view.player = mPlayer
-        mPlayer?.playWhenReady = true
-        hideSystemUi()
-        player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-        mPlayer!!.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-        mPlayer!!.prepare(media)
-    }
 
     private fun hideSystemUi() {
         player_view.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE

@@ -11,4 +11,15 @@
         android:layout_height="match_parent"
         app:show_buffering="when_playing"
         android:background="@android:color/black" />
+
+    <!-- Fake elements for avoiding NPE -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lectureRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/publishButton"
+        android:layout_height="0dp"
+        android:layout_width="0dp" />
 </LinearLayout>

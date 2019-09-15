@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AuthenticationViewModel(val listener: AuthListener) : ViewModel() {
+class AuthenticationViewModel(private val listener: AuthListener) : ViewModel() {
     interface AuthListener {
         fun onLoginSuccess()
         fun onLoginFailure(msg: String)
