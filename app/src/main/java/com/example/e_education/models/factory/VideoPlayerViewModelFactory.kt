@@ -9,7 +9,6 @@ import com.example.e_education.models.VideoPlayerViewModel
 class VideoPlayerViewModelFactory(private val context: Context) :
     ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        super.create(modelClass)
         return VideoPlayerViewModel(context) as T
     }
 }

@@ -194,6 +194,10 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
             toast("Please select a class!", Toast.LENGTH_LONG)
             return false
         }
+        if (lectureNum.text.isNullOrEmpty()) {
+            toast("Please enter lecture number")
+            return false
+        }
         if (radio_newChapter.isSelected){
             if (newChapterNameField.text.isEmpty() && !chapterSpinner.isSelected)
             {
@@ -239,6 +243,7 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
             chapter.lectureName = lectureNameField.text.toString()
             chapter.standard = classSpinner.selectedItem as String
             chapter.subject = SubjectNumber.toKey(subjectSpinner.selectedItem as String)
+            chapter.lectureNum = lectureNum.text.toString().toInt()
             val drawable = (uploadImage.drawable) as BitmapDrawable
             val baos = ByteArrayOutputStream()
             val bitmap = drawable.bitmap
