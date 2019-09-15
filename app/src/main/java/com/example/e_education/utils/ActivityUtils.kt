@@ -58,3 +58,7 @@ fun <T : Any?> Intent.getExtra(name: String, to: Class<T>): T {
     val gson = Gson()
     return (gson.fromJson(this.getStringExtra(name), to))
 }
+
+fun Any.log(tag: String = "") {
+    Log.d(tag, this.toString())
+}

@@ -111,14 +111,14 @@ class LectureActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        videoModel?.prepareExoPlayer()
+        videoModel?.resume()
         hideSystemUi()
     }
 
-    /*  override fun onPause() {
-          super.onPause()
-
-      }*/
+    override fun onPause() {
+        super.onPause()
+        videoModel?.pause()
+    }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.search_bar)
