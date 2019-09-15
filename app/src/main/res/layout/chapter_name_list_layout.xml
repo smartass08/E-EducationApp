@@ -9,23 +9,32 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/chaptersNumberTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="25sp"
-        android:textColor="@android:color/holo_red_dark"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_margin="4dp"
-        android:background="@drawable/square_bg" />
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_weight="1">
 
+        <ImageView
+            android:id="@+id/chapterImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:src="@drawable/playbtn" />
+    </FrameLayout>
     <TextView
         android:id="@+id/chapterNameTextView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="3"
         android:padding="8dp"
         android:textSize="20sp"
         android:layout_gravity="center_vertical" />

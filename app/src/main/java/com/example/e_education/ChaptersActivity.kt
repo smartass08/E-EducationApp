@@ -63,8 +63,8 @@ class SubjectsActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, LectureActivity::class.java)
             val d = IntentData(data!!, ActivityIndex.ChaptersActivity)
             intent.putExtra(IntentData.name, d)
-            intent.putExtra("chapter", adapter!!.getChapterNameTextView(it).text)
-            val clickedChapterNum = adapter!!.getChapterNumTextView(it).text
+            val clickedChapterNum = adapter!!.getChapterNum(it)
+            Log.d(TAG, clickedChapterNum.toString())
             intent.putExtra("chapterNum", clickedChapterNum)
             startActivity(intent)
         }

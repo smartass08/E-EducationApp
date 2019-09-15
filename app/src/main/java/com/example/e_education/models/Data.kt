@@ -17,6 +17,7 @@ data class SliderData(
 
 data class Lecture(
     var id: String = "",
+    var lectureNum: Int = -1,
     var lectureName: String = "",
     var ofChapter: Int = -1,
     var chapterName: String = "",
@@ -25,12 +26,13 @@ data class Lecture(
     var imgRef: String = ""
 ){
     fun isValid(): Boolean =
-            ofChapter != -1 &&
-            id.isNotEmpty() &&
-            chapterName.isNotEmpty() &&
-            standard.isNotEmpty() &&
-            subject != -1 &&
-            lectureName.isNotEmpty()
+        lectureNum != -1 &&
+                ofChapter != -1 &&
+                id.isNotEmpty() &&
+                chapterName.isNotEmpty() &&
+                standard.isNotEmpty() &&
+                subject != -1 &&
+                lectureName.isNotEmpty()
 }
 
 data class User(

@@ -27,7 +27,9 @@ import com.example.e_education.utils.MediaSourceFactory
 import com.example.e_education.utils.getExtra
 import com.example.e_education.utils.putExtra
 import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lecture.*
@@ -39,6 +41,7 @@ class LectureActivity : AppCompatActivity() {
     private val currUser = auth.currentUser
     private val TAG = "LectureActivity"
     private var data: IntentData? = null
+    private var mPlayer: SimpleExoPlayer? = null
     override fun onStart() {
         super.onStart()
         if (currUser != null && currUser.uid == BuildConfig.AdminUID){
@@ -50,15 +53,13 @@ class LectureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecture)
         data = intent.getExtra(IntentData.name, IntentData::class.java)
-        val mTitle = intent.getStringExtra("chapter")
-        title = mTitle
 
         prepareExoPlayer()
         // Initiating the Data model
         val provider = ChaptersViewModelFactory(
             data!!.user.standard,
             data!!.subject,
-            intent.getStringExtra("chapterNum").toInt()
+            intent.getIntExtra("chapterNum", -1)
         )
 
         model = ViewModelProviders.of(this, provider).get(ChaptersViewModel::class.java)
@@ -72,8 +73,7 @@ class LectureActivity : AppCompatActivity() {
                 recyclerView.adapter = adapter
 
                 model.getChapterList()?.observe(this, Observer<List<Lecture>> {
-                    val data = it.sortedBy { it.lectureName }
-                    adapter.setData(ArrayList(data))
+                    adapter.setData(ArrayList(it))
                     Log.d("tag", data.toString())
                 })
                 recyclerView.layoutManager = LinearLayoutManager(
@@ -105,6 +105,20 @@ class LectureActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideSystemUi()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mPlayer!!.stop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mPlayer!!.release()
+    }
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item?.itemId == R.id.search_bar)
             Toast.makeText(applicationContext, "Not implemented", Toast.LENGTH_LONG).show()
@@ -118,17 +132,17 @@ class LectureActivity : AppCompatActivity() {
     }
 
     private fun prepareExoPlayer() {
-        val player = ExoPlayerFactory.newSimpleInstance(this)
+        mPlayer = ExoPlayerFactory.newSimpleInstance(this)
         val media = MediaSourceFactory.build(
-            Uri.parse("https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4"),
+            Uri.parse("https://archive.org/download/Pbtestfilemp4videotestmp4/video_test_512kb.mp4"),
             this
         )
-        player_view.player = player
-        player.playWhenReady = true
+        player_view.player = mPlayer
+        mPlayer?.playWhenReady = true
         hideSystemUi()
         player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-        player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-        player.prepare(media)
+        mPlayer!!.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+        mPlayer!!.prepare(media)
     }
 
     private fun hideSystemUi() {

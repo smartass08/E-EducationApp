@@ -1,8 +1,10 @@
 package com.example.e_education.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -10,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.e_education.R
 import com.example.e_education.models.Lecture
 import com.example.e_education.utils.ChaptersDiffUtilCallback
+import com.example.e_education.utils.TAG
+import com.example.e_education.utils.load
 
 
 class ChaptersRecyclerViewAdapter :
@@ -20,7 +24,7 @@ class ChaptersRecyclerViewAdapter :
 
     fun setData(data: List<Lecture>){
         oldChapters = chapters
-        chapters = data
+        chapters = data.sortedBy { it.ofChapter }
         val diffUtil = DiffUtil.calculateDiff(
             ChaptersDiffUtilCallback(
                 oldChapters,
@@ -33,15 +37,17 @@ class ChaptersRecyclerViewAdapter :
     fun setOnClickListener(callback: (view: View) -> Unit){
         onClick = callback
     }
-    fun getChapterNameTextView(view: View): TextView{
-        return (view as LinearLayout).getChildAt(1) as TextView
+
+    fun getChapterName(view: View): String {
+        return chapters[view.tag as Int].chapterName
     }
-    fun getChapterNumTextView(view: View): TextView{
-        return (view as LinearLayout).getChildAt(0) as TextView
+
+    fun getChapterNum(view: View): Int {
+        return chapters[view.tag as Int].ofChapter
     }
     class ChaptersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val chapterName: TextView = itemView.findViewById(R.id.chapterNameTextView)
-        val chapterNumber: TextView = itemView.findViewById(R.id.chaptersNumberTextView)
+        val chapterImage: ImageView = itemView.findViewById(R.id.chapterImage)
         val chapterNameRoot: LinearLayout = itemView.findViewById(R.id.layoutRoot)
     }
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ChaptersViewHolder {
@@ -53,8 +59,14 @@ class ChaptersRecyclerViewAdapter :
 
     override fun onBindViewHolder(p0: ChaptersViewHolder, i: Int) {
         p0.chapterName.text = chapters[i].chapterName
-        p0.chapterNumber.text = "${chapters[i].ofChapter}"
+        if (chapters[i].imgRef.isEmpty()) {
+            p0.chapterImage.setImageResource(R.drawable.physics)
+        } else {
+            Log.d(TAG, chapters[i].imgRef)
+            p0.chapterImage.load(chapters[i].imgRef)
+        }
         p0.chapterNameRoot.setOnClickListener(onClick)
+        p0.chapterNameRoot.tag = i
     }
 }
 

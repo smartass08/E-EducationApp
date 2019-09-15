@@ -21,7 +21,7 @@ class LectureRecyclerViewAdapter:
     private var oldData: List<Lecture> = ArrayList()
     fun setData(newData: List<Lecture>){
         oldData = data
-        data = newData
+        data = newData.sortedBy { it.lectureNum }
         val diffUtil = DiffUtil.calculateDiff(LecturesDiffUtilCallback(oldData, data), true)
         diffUtil.dispatchUpdatesTo(this)
     }
@@ -33,19 +33,13 @@ class LectureRecyclerViewAdapter:
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        if (data[p1].imgRef.isEmpty()) {
-            p0.lectureIcon.setImageResource(R.drawable.physics)
-        } else {
-            Log.d(TAG, data[p1].imgRef)
-            p0.lectureIcon.load(data[p1].imgRef)
-        }
-
+        p0.lectureNum.text = "${data[p1].lectureNum}"
 
         p0.lectureNameView.text = data[p1].lectureName
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val lectureIcon: ImageView = view.findViewById(R.id.lectureImage)
+        val lectureNum: TextView = view.findViewById(R.id.lectureNumbTextView)
         val lectureNameView: TextView = view.findViewById(R.id.lectureName)
     }
 }
