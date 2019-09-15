@@ -6,9 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,10 +20,7 @@ import com.example.e_education.adapter.LectureRecyclerViewAdapter
 import com.example.e_education.models.*
 import com.example.e_education.models.factory.ChaptersViewModelFactory
 import com.example.e_education.models.factory.VideoPlayerViewModelFactory
-import com.example.e_education.utils.ActivityIndex
-import com.example.e_education.utils.MediaSourceFactory
-import com.example.e_education.utils.getExtra
-import com.example.e_education.utils.putExtra
+import com.example.e_education.utils.*
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -34,7 +29,10 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_lecture.*
 
-class LectureActivity : AppCompatActivity() {
+class LectureActivity : AppCompatActivity(),
+    View.OnTouchListener,
+    GestureDetector.OnGestureListener,
+    GestureDetector.OnDoubleTapListener {
 
     lateinit var model: ChaptersViewModel
     private val auth = FirebaseAuth.getInstance()
@@ -42,6 +40,7 @@ class LectureActivity : AppCompatActivity() {
     private val TAG = "LectureActivity"
     private var data: IntentData? = null
     private var videoModel: VideoPlayerViewModel? = null
+    private var mGestureDetector: GestureDetector? = null
     override fun onStart() {
         super.onStart()
         if (currUser != null && currUser.uid == BuildConfig.AdminUID){
@@ -54,10 +53,12 @@ class LectureActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lecture)
         data = intent.getExtra(IntentData.name, IntentData::class.java)
 
+        mGestureDetector = android.view.GestureDetector(this, this)
         val videoProvider = VideoPlayerViewModelFactory(this)
         videoModel = ViewModelProviders.of(this, videoProvider).get(VideoPlayerViewModel::class.java)
         player_view.player = videoModel?.getPlayer()
         player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+        player_view.setOnTouchListener(this)
 
         // Initiating the Data model
         val provider = ChaptersViewModelFactory(
@@ -68,7 +69,6 @@ class LectureActivity : AppCompatActivity() {
 
         model = ViewModelProviders.of(this, provider).get(ChaptersViewModel::class.java)
             if (model.authUser != null && model.authUser?.uid == BuildConfig.AdminUID) {
-                Log.d(TAG, "Admin")
                 publishButton.show()
             }
                 // Initiate recyclerView
@@ -78,7 +78,7 @@ class LectureActivity : AppCompatActivity() {
 
                 model.getChapterList()?.observe(this, Observer<List<Lecture>> {
                     adapter.setData(ArrayList(it))
-                    Log.d("tag", data.toString())
+                    data?.log(TAG)
                 })
                 recyclerView.layoutManager = LinearLayoutManager(
                     applicationContext,
@@ -125,6 +125,37 @@ class LectureActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Not implemented", Toast.LENGTH_LONG).show()
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        mGestureDetector?.onTouchEvent(event)
+        return true
+    }
+
+    override fun onDoubleTap(e: MotionEvent?): Boolean {
+        if (e?.x!!.compareTo(player_view.width / 2) < 0) {
+            // Clicked on the LEFT side. Rewind 10s
+            videoModel?.rewind()
+            return true
+        } else if (e.x.compareTo(player_view.width / 2) > 0) {
+            // Clicked on the RIGHT side. Forward 10s
+            videoModel?.forward()
+            return true
+        }
+        return false
+    }
+
+    override fun onDoubleTapEvent(e: MotionEvent?): Boolean = false
+    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+        player_view.performClick()
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent?) {}
+    override fun onSingleTapUp(e: MotionEvent?): Boolean = false
+    override fun onDown(e: MotionEvent?): Boolean = false
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean = false
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean = false
+    override fun onLongPress(e: MotionEvent?) {}
 
     fun onAddButtonClicked(view: View){
         val intent = Intent(this, PublishVideoActivity::class.java)

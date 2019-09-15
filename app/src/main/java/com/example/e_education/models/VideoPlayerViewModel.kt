@@ -2,12 +2,14 @@ package com.example.e_education.models
 
 import android.content.Context
 import android.net.Uri
+import android.util.TimeUtils
 import androidx.lifecycle.ViewModel
 import com.example.e_education.utils.MediaSourceFactory
 import com.example.e_education.utils.log
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
+import java.util.concurrent.TimeUnit
 
 
 class VideoPlayerViewModel(context: Context) : ViewModel() {
@@ -36,5 +38,13 @@ class VideoPlayerViewModel(context: Context) : ViewModel() {
         mPlayer.seekTo(playedDuration)
         mPlayer.currentPosition.log("Current Position")
         mPlayer.playWhenReady = true
+    }
+
+    fun rewind() {
+        mPlayer.seekTo(mPlayer.currentPosition - TimeUnit.SECONDS.toMillis(10))
+    }
+
+    fun forward() {
+        mPlayer.seekTo(mPlayer.currentPosition + TimeUnit.SECONDS.toMillis(10))
     }
 }
