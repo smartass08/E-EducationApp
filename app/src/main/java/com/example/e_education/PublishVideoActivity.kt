@@ -40,6 +40,7 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
     private val TAG = "PublishVideoActivity"
     private lateinit var model: ChaptersViewModel
     private var chapter = Lecture()
+
     companion object {
         private const val imagePickerRequest = 100
         private val permissionArr = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -84,7 +85,7 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun getPhoto(){
+    private fun getPhoto() {
         if (permissionGranted()) {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, imagePickerRequest)
@@ -93,10 +94,11 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         }
     }
 
-    private fun permissionGranted(): Boolean{
+    private fun permissionGranted(): Boolean {
         return (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED)
+                == PackageManager.PERMISSION_GRANTED)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_publish_video)
@@ -109,17 +111,20 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         if (parentActivity == ActivityIndex.ChaptersActivity) {
             radio_newChapter.isChecked = true
             onRadioButtonClicked(radio_newChapter)
-        }
-        else if (parentActivity == ActivityIndex.LectureActivity) {
+        } else if (parentActivity == ActivityIndex.LectureActivity) {
             radio_existing.isChecked = true
             onRadioButtonClicked(radio_existing)
         }
-        classSpinner.adapter = ArrayAdapter<String>(this,
+        classSpinner.adapter = ArrayAdapter<String>(
+            this,
             android.R.layout.simple_spinner_dropdown_item,
-            resources.getStringArray(R.array.classes))
-        subjectSpinner.adapter = ArrayAdapter<String>(this,
+            resources.getStringArray(R.array.classes)
+        )
+        subjectSpinner.adapter = ArrayAdapter<String>(
+            this,
             android.R.layout.simple_spinner_dropdown_item,
-            resources.getStringArray(R.array.subjects))
+            resources.getStringArray(R.array.subjects)
+        )
 
         uploadImage.setOnClickListener {
             Log.d(TAG, "clicked")
@@ -129,11 +134,9 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){
-            imagePickerRequest ->
-            {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+        when (requestCode) {
+            imagePickerRequest -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getPhoto()
 
                 } else {
@@ -146,14 +149,15 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK){
-            if (requestCode == imagePickerRequest && data != null){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == imagePickerRequest && data != null) {
 
                 uploadImage.setImageBitmap(MediaStore.Images.Media.getBitmap(this.contentResolver, data.data))
             }
         }
     }
-    fun onRadioButtonClicked(view: View){
+
+    fun onRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             val checked = view.isChecked
 
@@ -184,13 +188,12 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         }
     }
 
-    private fun isFormValid(): Boolean{
-        if (youtubeURLField.text.isEmpty())
-        {
+    private fun isFormValid(): Boolean {
+        if (youtubeURLField.text.isEmpty()) {
             toast("Please enter a valid URL!")
             return false
         }
-        if (classSpinner.selectedItemPosition == 0){
+        if (classSpinner.selectedItemPosition == 0) {
             toast("Please select a class!", Toast.LENGTH_LONG)
             return false
         }
@@ -198,20 +201,18 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
             toast("Please enter lecture number")
             return false
         }
-        if (radio_newChapter.isSelected){
-            if (newChapterNameField.text.isEmpty() && !chapterSpinner.isSelected)
-            {
+        if (radio_newChapter.isSelected) {
+            if (newChapterNameField.text.isEmpty() && !chapterSpinner.isSelected) {
                 toast("Please enter chapter name or select from an existing one!")
                 return false
             }
-            if (chapterNum.text.isEmpty()){
+            if (chapterNum.text.isEmpty()) {
                 toast("Please enter lecture name!")
                 return false
             }
         }
-        if (radio_existing.isSelected){
-            if (lectureNameField.text.isEmpty())
-            {
+        if (radio_existing.isSelected) {
+            if (lectureNameField.text.isEmpty()) {
                 toast("Please enter lecture name!")
                 return false
             }
@@ -222,13 +223,14 @@ class PublishVideoActivity : AppCompatActivity(), UploadListener {
         }
         return true
     }
-    fun onPublishButtonClicked(view: View){
-        if (isFormValid()){
-            if (radio_newChapter.isChecked){
+
+    fun onPublishButtonClicked(view: View) {
+        if (isFormValid()) {
+            if (radio_newChapter.isChecked) {
                 Log.d(TAG, "Adding New chapter")
                 chapter.chapterName = newChapterNameField.text.toString()
                 chapter.ofChapter = chapterNum.text.toString().toInt()
-            } else if (radio_existing.isChecked){
+            } else if (radio_existing.isChecked) {
 
                 val pattern = Pattern.compile("[0-9]+")
                 val m = pattern.matcher(chapterSpinner.selectedItem as String)

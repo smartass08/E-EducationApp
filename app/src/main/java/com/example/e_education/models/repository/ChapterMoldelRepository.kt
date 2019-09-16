@@ -10,7 +10,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
-class ChapterRepository{
+class ChapterRepository {
 
     companion object {
         const val collectionRoot = "chapters"
@@ -32,22 +32,22 @@ class ChapterRepository{
             .addOnProgressListener {
                 uplaodProgress.value = (100 * it.bytesTransferred) / it.totalByteCount
             }
-            uploadTask.addOnSuccessListener {
-                Log.d(TAG, it.storage.downloadUrl.toString())
-                db.collection(collectionRoot).document()
-                    .set(lecture)
-                    .addOnSuccessListener {
-                        uploadListener!!.onUploadComplete()
-                    }
-                    .addOnFailureListener {
-                        uploadListener!!.onUploadFailed("Failure adding Lecture: $it")
-                    }
-            }.addOnFailureListener {
-                Log.d(TAG, it.message)
-            }
+        uploadTask.addOnSuccessListener {
+            Log.d(TAG, it.storage.downloadUrl.toString())
+            db.collection(collectionRoot).document()
+                .set(lecture)
+                .addOnSuccessListener {
+                    uploadListener!!.onUploadComplete()
+                }
+                .addOnFailureListener {
+                    uploadListener!!.onUploadFailed("Failure adding Lecture: $it")
+                }
+        }.addOnFailureListener {
+            Log.d(TAG, it.message)
+        }
     }
 
-    private suspend fun updateInBackground(lecture: Lecture){
+    private suspend fun updateInBackground(lecture: Lecture) {
         db.collection(collectionRoot).document("${lecture.ofChapter}")
             .get()
             .addOnSuccessListener {
@@ -62,7 +62,8 @@ class ChapterRepository{
                 }
             }
     }
-    private suspend fun deleteInBackground(lecture: Lecture){
+
+    private suspend fun deleteInBackground(lecture: Lecture) {
         db.collection(collectionRoot).document("${lecture.ofChapter}")
             .delete()
     }
@@ -86,7 +87,7 @@ class ChapterRepository{
         }
     }
 
-    fun getAllChapters(standard: String, subject: String, chapterNumber: Int): Query{
+    fun getAllChapters(standard: String, subject: String, chapterNumber: Int): Query {
         val subjectKey = SubjectNumber.toKey(subject)
         Log.d(TAG, "$standard: $subjectKey: $subject")
         return if (chapterNumber == -1) {

@@ -17,12 +17,12 @@ import com.example.e_education.utils.load
 
 
 class ChaptersRecyclerViewAdapter :
-        RecyclerView.Adapter<ChaptersRecyclerViewAdapter.ChaptersViewHolder>(){
+    RecyclerView.Adapter<ChaptersRecyclerViewAdapter.ChaptersViewHolder>() {
 
     private var chapters: List<Lecture> = ArrayList()
     private var oldChapters: List<Lecture> = ArrayList()
 
-    fun setData(data: List<Lecture>){
+    fun setData(data: List<Lecture>) {
         oldChapters = chapters
         chapters = data.sortedBy { it.ofChapter }
         val diffUtil = DiffUtil.calculateDiff(
@@ -33,8 +33,9 @@ class ChaptersRecyclerViewAdapter :
         )
         diffUtil.dispatchUpdatesTo(this)
     }
+
     private var onClick: (view: View) -> Unit = {}
-    fun setOnClickListener(callback: (view: View) -> Unit){
+    fun setOnClickListener(callback: (view: View) -> Unit) {
         onClick = callback
     }
 
@@ -45,11 +46,13 @@ class ChaptersRecyclerViewAdapter :
     fun getChapterNum(view: View): Int {
         return chapters[view.tag as Int].ofChapter
     }
-    class ChaptersViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
+    class ChaptersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val chapterName: TextView = itemView.findViewById(R.id.chapterNameTextView)
         val chapterImage: ImageView = itemView.findViewById(R.id.chapterImage)
         val chapterNameRoot: LinearLayout = itemView.findViewById(R.id.layoutRoot)
     }
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ChaptersViewHolder {
         val itemView = LayoutInflater.from(p0.context).inflate(R.layout.chapter_name_list_layout, p0, false)
         return ChaptersViewHolder(itemView)

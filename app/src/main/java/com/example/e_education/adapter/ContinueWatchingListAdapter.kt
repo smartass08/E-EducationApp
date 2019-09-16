@@ -14,14 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.e_education.R
 import com.example.e_education.models.ContinueWatchingData
 
-class ContinueWatchingListAdapter(private val context: Context, private val data: ArrayList<ContinueWatchingData>)
-    : RecyclerView.Adapter<ContinueWatchingListAdapter.mViewHolder>() {
+class ContinueWatchingListAdapter(private val context: Context, private val data: ArrayList<ContinueWatchingData>) :
+    RecyclerView.Adapter<ContinueWatchingListAdapter.mViewHolder>() {
     private var itemsPerPage = 2 // TODO: Find a better name for itemsPerPage
 
-    public fun setItemsPerPage(value: Int){
+    public fun setItemsPerPage(value: Int) {
         // Call before attaching adapter to the RecyclerView. Default value is 2
         itemsPerPage = value
     }
+
     private fun getScreenWidth(): Int {
 
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -31,11 +32,13 @@ class ContinueWatchingListAdapter(private val context: Context, private val data
 
         return size.x - 24
     }
-    class mViewHolder(view: View) : RecyclerView.ViewHolder(view){
+
+    class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val captionTextView: TextView = view.findViewById(R.id.captionTextView)
         val lectureImageView: ImageView = view.findViewById(R.id.lectureImage)
         val infoIcon: ImageView = view.findViewById(R.id.infoIcon)
     }
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): mViewHolder {
         val viewHolder = LayoutInflater.from(p0.context).inflate(R.layout.continue_watching_recycler_layout, p0, false)
         viewHolder.layoutParams.width = getScreenWidth() / itemsPerPage

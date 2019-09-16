@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        for (i in 0..(max(imageArray.size, captionArray.size) - 1)){
+        for (i in 0..(max(imageArray.size, captionArray.size) - 1)) {
             sliderDataArray.add(SliderData(i, imageArray[i]))
         }
         val imageSlider = findViewById<ViewPager>(R.id.uploadSlider)
@@ -53,9 +53,10 @@ class MainActivity : AppCompatActivity() {
 
 
         // Code for Continue Watching Recycler View
-        for (i in 0..(max(imageArray.size, captionArray.size) - 1)){
+        for (i in 0..(max(imageArray.size, captionArray.size) - 1)) {
             continueWatchingDataArray.add(
-                ContinueWatchingData(i,
+                ContinueWatchingData(
+                    i,
                     imageArray[i],
                     captionArray[i]
                 )
@@ -82,12 +83,14 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    private fun logout(){
+
+    private fun logout() {
         auth.signOut()
         finish()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_action_bar, menu)
         return super.onCreateOptionsMenu(menu)
@@ -107,7 +110,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressWarnings
-    fun onSubjectButtonClicked(view: View){
+    fun onSubjectButtonClicked(view: View) {
         val text = ((view as CardView).getChildAt(0) as TextView).text.toString()
         val d = intent.getExtra(IntentData.name, IntentData::class.java)
         val data = IntentData(d.user, SubjectNumber.toKey(text), ActivityIndex.MainActivity)

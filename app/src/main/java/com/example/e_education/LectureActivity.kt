@@ -39,11 +39,12 @@ class LectureActivity : AppCompatActivity(),
 
     override fun onStart() {
         super.onStart()
-        if (currUser != null && currUser.uid == BuildConfig.AdminUID){
+        if (currUser != null && currUser.uid == BuildConfig.AdminUID) {
             Log.d(TAG, "Admin")
             publishButton.show()
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecture)
@@ -64,41 +65,41 @@ class LectureActivity : AppCompatActivity(),
         player_view.setOnTouchListener(this)
 
         val adapter = LectureRecyclerViewAdapter(this)
-            if (model.authUser != null && model.authUser?.uid == BuildConfig.AdminUID) {
-                publishButton.show()
-            }
-                // Initiate recyclerView
-                val recyclerView: RecyclerView = findViewById(R.id.lectureRecyclerView)
-                recyclerView.adapter = adapter
+        if (model.authUser != null && model.authUser?.uid == BuildConfig.AdminUID) {
+            publishButton.show()
+        }
+        // Initiate recyclerView
+        val recyclerView: RecyclerView = findViewById(R.id.lectureRecyclerView)
+        recyclerView.adapter = adapter
         adapter.setOnItemClickListener {
             videoModel?.changeMedia(Uri.parse(adapter.getData(it).id))
         }
-                model.getChapterList()?.observe(this, Observer<List<Lecture>> {
-                    val videoProvider = VideoPlayerViewModelFactory(this, Uri.parse(it[0].id))
-                    videoModel = ViewModelProviders.of(this, videoProvider).get(VideoPlayerViewModel::class.java)
-                    player_view.player = videoModel?.getPlayer()
-                    adapter.setData(ArrayList(it))
-                    data?.log(TAG)
-                })
-                recyclerView.layoutManager = LinearLayoutManager(
-                    applicationContext,
-                    RecyclerView.VERTICAL,
-                    false
-                )
-                recyclerView.addItemDecoration(
-                    DividerItemDecoration(
-                        this,
-                        DividerItemDecoration.VERTICAL
-                    )
-                )
-            }
+        model.getChapterList()?.observe(this, Observer<List<Lecture>> {
+            val videoProvider = VideoPlayerViewModelFactory(this, Uri.parse(it[0].id))
+            videoModel = ViewModelProviders.of(this, videoProvider).get(VideoPlayerViewModel::class.java)
+            player_view.player = videoModel?.getPlayer()
+            adapter.setData(ArrayList(it))
+            data?.log(TAG)
+        })
+        recyclerView.layoutManager = LinearLayoutManager(
+            applicationContext,
+            RecyclerView.VERTICAL,
+            false
+        )
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_action_bar, menu)
         val searchView = menu?.findItem(R.id.search_bar)?.actionView as SearchView
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean = true
             override fun onQueryTextChange(p0: String?): Boolean {
                 model.search(p0)
@@ -121,7 +122,7 @@ class LectureActivity : AppCompatActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == R.id.search_bar)
+        if (item?.itemId == R.id.search_bar)
             Toast.makeText(applicationContext, "Not implemented", Toast.LENGTH_LONG).show()
         return super.onOptionsItemSelected(item)
     }
@@ -159,7 +160,7 @@ class LectureActivity : AppCompatActivity(),
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean = false
     override fun onLongPress(e: MotionEvent?) {}
 
-    fun onAddButtonClicked(view: View){
+    fun onAddButtonClicked(view: View) {
         val intent = Intent(this, PublishVideoActivity::class.java)
         intent.putExtra(IntentData.name, IntentData(data!!, ActivityIndex.LectureActivity))
         startActivity(intent)

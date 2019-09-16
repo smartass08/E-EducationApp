@@ -15,31 +15,33 @@ import com.example.e_education.models.SliderData
 import java.util.concurrent.Executors
 
 
-class SliderPageAdapter(private var context: Context, private var sliderDataArray: ArrayList<SliderData>): PagerAdapter()
-{
+class SliderPageAdapter(private var context: Context, private var sliderDataArray: ArrayList<SliderData>) :
+    PagerAdapter() {
     private var layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     var handler: Handler? = null
     var runTask: Runnable? = null
     private var currentPage: Int = 0
 
-    fun onActivityDestroyed(){
+    fun onActivityDestroyed() {
         val service = Executors.newSingleThreadExecutor()
         val f = service.submit(runTask)
         f.cancel(true)
     }
-    fun setAutoSlideDuration(viewPager: ViewPager, duration: Long){
+
+    fun setAutoSlideDuration(viewPager: ViewPager, duration: Long) {
         handler = Handler()
-        runTask = object: Runnable{
+        runTask = object : Runnable {
             override fun run() {
                 handler!!.postDelayed(this, duration)
                 if (currentPage == count)
                     currentPage = 0
 
-                    viewPager.currentItem = currentPage++
+                viewPager.currentItem = currentPage++
             }
         }
         runTask!!.run()
     }
+
     override fun isViewFromObject(p0: View, p1: Any): Boolean {
         return p0 == (p1 as FrameLayout)
     }

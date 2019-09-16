@@ -86,7 +86,7 @@ class SubjectsActivity : AppCompatActivity() {
         val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
 
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean = true
 
             override fun onQueryTextChange(p0: String?): Boolean {
@@ -98,7 +98,7 @@ class SubjectsActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun onAddButtonClicked(view: View){
+    fun onAddButtonClicked(view: View) {
         val i = Intent(this, PublishVideoActivity::class.java)
         val sendData = IntentData(data!!, ActivityIndex.ChaptersActivity)
         i.putExtra(IntentData.name, sendData)

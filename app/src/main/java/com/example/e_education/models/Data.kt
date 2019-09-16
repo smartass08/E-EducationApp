@@ -24,7 +24,7 @@ data class Lecture(
     var standard: String = "",
     var subject: Int = -1,
     var imgRef: String = ""
-){
+) {
     fun isValid(): Boolean =
         lectureNum != -1 &&
                 ofChapter != -1 &&
@@ -41,8 +41,9 @@ data class User(
     val standard: String,
     val formNum: String,
     val isVerified: Boolean
-){
+) {
     constructor() : this("", "", "", "", false)
+
     companion object {
         const val USER_FIELD_NAME = "users"
     }

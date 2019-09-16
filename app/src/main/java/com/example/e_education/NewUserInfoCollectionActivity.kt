@@ -31,15 +31,17 @@ class NewUserInfoCollectionActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         title = "Getting some more info"
 
-        classSpinner.adapter = ArrayAdapter<String>(this,
+        classSpinner.adapter = ArrayAdapter<String>(
+            this,
             android.R.layout.simple_spinner_dropdown_item,
-            classSupported)
-        submit_button.setOnClickListener{ updateDetailsToDB() }
+            classSupported
+        )
+        submit_button.setOnClickListener { updateDetailsToDB() }
 
         uid = intent.getStringExtra("uid")
     }
 
-    private fun updateDetailsToDB(){
+    private fun updateDetailsToDB() {
         if (mUpdateTask != null) {
             return
         }
@@ -59,35 +61,41 @@ class NewUserInfoCollectionActivity : AppCompatActivity() {
             fullName.error = getString(R.string.error_field_required)
             focusView = fullName
             cancel = true
-        }  else if (TextUtils.isEmpty(formStr)){
+        } else if (TextUtils.isEmpty(formStr)) {
             formInput.error = getString(R.string.error_field_required)
             focusView = formInput
             cancel = true
-        }  else if (classSpinner.selectedItemPosition == 0){
+        } else if (classSpinner.selectedItemPosition == 0) {
             Toast.makeText(this, "Class not selected", Toast.LENGTH_LONG).show()
             cancel = true
         }
-        if (cancel){
+        if (cancel) {
             focusView?.requestFocus()
         } else {
-            val user = User(fullNameStr, intent.getStringExtra("email"), classSupported[classSpinner.selectedItemPosition], formStr, true)
+            val user = User(
+                fullNameStr,
+                intent.getStringExtra("email"),
+                classSupported[classSpinner.selectedItemPosition],
+                formStr,
+                true
+            )
             mUpdateTask = UpdateTask(user)
             mUpdateTask!!.execute(null)
         }
 
     }
 
-    inner class UpdateTask(val user: User) : AsyncTask<Void, Void, Unit>(){
-        override fun doInBackground(vararg p0: Void?){
+    inner class UpdateTask(val user: User) : AsyncTask<Void, Void, Unit>() {
+        override fun doInBackground(vararg p0: Void?) {
             dbRef.collection(User.USER_FIELD_NAME).document(uid!!)
                 .set(user)
-                .addOnSuccessListener{
+                .addOnSuccessListener {
                     Log.d("UpdateTask", "success")
                     finish()
                     val intent = Intent(baseContext, MainActivity::class.java)
                     startActivity(intent)
                 }
-                .addOnFailureListener{
+                .addOnFailureListener {
                     Log.d("UpdateTask", it.toString())
                 }
         }

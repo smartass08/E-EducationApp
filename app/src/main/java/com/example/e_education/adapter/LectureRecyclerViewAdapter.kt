@@ -16,7 +16,7 @@ import com.example.e_education.models.Lecture
 import com.example.e_education.utils.LecturesDiffUtilCallback
 
 class LectureRecyclerViewAdapter(val context: Context) :
-        RecyclerView.Adapter<LectureRecyclerViewAdapter.ViewHolder>(){
+    RecyclerView.Adapter<LectureRecyclerViewAdapter.ViewHolder>() {
 
     private var data: List<Lecture> = ArrayList()
     private var oldData: List<Lecture> = ArrayList()
@@ -40,7 +40,7 @@ class LectureRecyclerViewAdapter(val context: Context) :
         return data[view?.tag as Int]
     }
 
-    fun setData(newData: List<Lecture>){
+    fun setData(newData: List<Lecture>) {
         oldData = data
         data = newData
         val diffUtil = DiffUtil.calculateDiff(LecturesDiffUtilCallback(oldData, data), true)
@@ -76,7 +76,7 @@ class LectureRecyclerViewAdapter(val context: Context) :
         p0.lectureNameView.text = data[p1].lectureName
     }
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lectureNum: TextView = view.findViewById(R.id.lectureNumbTextView)
         val lectureNameView: TextView = view.findViewById(R.id.lectureName)
         val root: LinearLayout = view.findViewById(R.id.lectureLayoutRoot)
