@@ -55,7 +55,7 @@ class SubjectsActivity : AppCompatActivity() {
                 adapter?.setData(emptyList())
             } else {
                 val arr = it.distinctBy { it.ofChapter }
-                adapter?.setData(arr.sortedBy { it.ofChapter })
+                adapter?.setData(arr)
                 Log.d(TAG, it.toString())
             }
         })

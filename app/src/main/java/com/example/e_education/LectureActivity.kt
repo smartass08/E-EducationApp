@@ -36,7 +36,7 @@ class LectureActivity : AppCompatActivity(),
     private var data: IntentData? = null
     private var videoModel: VideoPlayerViewModel? = null
     private var mGestureDetector: GestureDetector? = null
-    val adapter = LectureRecyclerViewAdapter()
+
     override fun onStart() {
         super.onStart()
         if (currUser != null && currUser.uid == BuildConfig.AdminUID){
@@ -63,7 +63,7 @@ class LectureActivity : AppCompatActivity(),
         player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
         player_view.setOnTouchListener(this)
 
-
+        val adapter = LectureRecyclerViewAdapter(this)
             if (model.authUser != null && model.authUser?.uid == BuildConfig.AdminUID) {
                 publishButton.show()
             }
@@ -126,11 +126,13 @@ class LectureActivity : AppCompatActivity(),
         return super.onOptionsItemSelected(item)
     }
 
+    /**************** FOR VIDEO PLAYER **************/
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         mGestureDetector?.onTouchEvent(event)
         return true
     }
 
+    /****************** IMPLEMENTING DOUBLE TAP TO FORWARD - REWIND**********************/
     override fun onDoubleTap(e: MotionEvent?): Boolean {
         if (e?.x!!.compareTo(player_view.width / 2) < 0) {
             // Clicked on the LEFT side. Rewind 10s

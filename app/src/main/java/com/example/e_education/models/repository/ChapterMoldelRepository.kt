@@ -22,6 +22,8 @@ class ChapterRepository{
     private val collectionRef = db.collection(collectionRoot)
     private val storageRef = FirebaseStorage.getInstance().reference
     var uploadListener: UploadListener? = null
+
+
     private suspend fun insertInBackground(lecture: Lecture, imageData: ByteArray) {
         val fileExtension = "jpg"
         lecture.imgRef = "${lecture.ofChapter}/${UUID.randomUUID()}.$fileExtension"
@@ -91,11 +93,14 @@ class ChapterRepository{
             db.collection(collectionRoot)
                 .whereEqualTo("standard", standard)
                 .whereEqualTo("subject", subjectKey)
+                .orderBy("ofChapter")
         } else {
             db.collection(collectionRoot)
                 .whereEqualTo("standard", standard)
                 .whereEqualTo("subject", subjectKey)
                 .whereEqualTo("ofChapter", chapterNumber)
+                .orderBy("lectureNum")
+
         }
     }
 }
